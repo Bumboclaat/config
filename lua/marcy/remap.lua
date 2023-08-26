@@ -5,6 +5,16 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- greatest remap ever
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+-- replace all occurrences of the word under the cursor
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
@@ -51,7 +61,6 @@ vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, { de
 vim.keymap.set('n', '<leader>nc', '<Cmd>:Telescope neoclip<CR>')
 vim.keymap.set('n', '<leader>fb', '<Cmd>:Telescope file_browser path=%:p:h select_buffer=true<CR>')
 
-vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 vim.keymap.set('n', '<leader><leader>c', vim.cmd.up)
 vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>')
 vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>')
@@ -67,8 +76,8 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 -- normal mode
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
-vim.keymap.set('n', '<C-j>', vim.cmd.bnext)
-vim.keymap.set('n', '<C-k>', vim.cmd.bprev)
+-- vim.keymap.set('n', '<C-j>', vim.cmd.bnext)
+-- vim.keymap.set('n', '<C-k>', vim.cmd.bprev)
 vim.keymap.set('n', '<C-w>', vim.cmd.bd)
 vim.keymap.set('n', '<C-h>', vim.cmd.tabn)
 vim.keymap.set('n', '<C-l>', vim.cmd.tabp)
@@ -80,8 +89,8 @@ vim.keymap.set('n', 'gf', '<C-i>')
 
 -- move between splits
 vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
--- vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
--- vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
+vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
+vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
 vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
 
 
@@ -91,7 +100,7 @@ vim.keymap.set('n', '<C-.>', '<C-W>>')
 
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', 'ge', vim.diagnostic.goto_prev)
+vim.keymap.set('n', 'gE', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>di', vim.diagnostic.setloclist)
