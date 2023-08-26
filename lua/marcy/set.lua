@@ -14,6 +14,7 @@ vim.opt.foldlevel = 1337
 
 -- Set highlight on search
 vim.o.hlsearch = false
+vim.o.incsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -37,6 +38,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
+-- vim.opt.colorcolumn = "160"
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
