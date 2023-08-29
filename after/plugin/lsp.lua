@@ -75,3 +75,6 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
+
+-- setup svelte server
+require'lspconfig'.svelte.setup{}
