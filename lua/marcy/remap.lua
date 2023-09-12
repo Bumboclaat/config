@@ -27,10 +27,10 @@ vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 
 -- remap to open the Telescope refactoring menu in visual mode
 vim.api.nvim_set_keymap(
-  "v",
-  "<leader>rr",
-  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-  { noremap = true }
+	"v",
+	"<leader>rr",
+	"<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+	{ noremap = true }
 )
 
 -- Enable telescope fzf native, if installed
@@ -41,11 +41,11 @@ pcall(require('telescope').load_extension, 'fzf')
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
+	-- You can pass additional configuration to telescope to change theme, layout, etc.
+	require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+		winblend = 10,
+		previewer = false,
+	})
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 -- leader remaps
@@ -63,11 +63,35 @@ vim.keymap.set('n', '<leader>nc', '<Cmd>:Telescope neoclip<CR>')
 vim.keymap.set('n', '<leader>fb', '<Cmd>:Telescope file_browser path=%:p:h select_buffer=true<CR>')
 
 vim.keymap.set('n', '<leader><leader>c', vim.cmd.up)
-vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>')
-vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>')
-vim.keymap.set('n', '<leader>t', '<Cmd>:Neotree toggle<CR>')
-vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>')
+vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>', {desc = '[Q]uit Buffer'})
+vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>', {desc = '[P]rettier [F]ormat'})
+vim.keymap.set('n', '<leader>t', '<Cmd>:Neotree toggle<CR>', {desc = '[T]oggle Neotree'})
+vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>',{desc = '[T]oggle [T]erminal'})
 
+-- lsp remaps
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = '[R]e[n]ame' })
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ction' })
+
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = '[G]oto [D]efinition' })
+vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = '[G]oto [R]eferences' })
+vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = '[G]oto [I]mplementation' })
+vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, { desc = 'Type [D]efinition' })
+vim.keymap.set('n', '<leader>ds', require('telescope.builtin').lsp_document_symbols, { desc = '[D]ocument [S]ymbols' })
+vim.keymap.set('n', '<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols,
+	{ desc = '[W]orkspace [S]ymbols' })
+vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat' })
+
+-- See `:help K` for why this keymap
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
+-- vim.keymap.set('n',('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+-- Lesser used LSP functionality
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = '[G]oto [D]eclaration' })
+vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, { desc = '[W]orkspace [A]dd Folder' })
+vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, { desc = '[W]orkspace [R]emove Folder' })
+vim.keymap.set('n', '<leader>wl', function()
+	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, { desc = '[W]orkspace [L]ist Folders' })
 
 -- own configurations
 -- visual mode
@@ -101,7 +125,7 @@ vim.keymap.set('n', '<C-.>', '<C-W>>')
 
 
 -- Diagnostic keymaps
-vim.keymap.set('n', 'ge', vim.diagnostic.goto_prev)
-vim.keymap.set('n', 'gE', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>di', vim.diagnostic.setloclist)
+vim.keymap.set('n', 'ge', vim.diagnostic.goto_next, {desc = '[G]o to next [e]rror'})
+vim.keymap.set('n', 'gE', vim.diagnostic.goto_prev, {desc = '[G]o to previous [E]rror'})
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, {desc = 'Open [e]rror float'})
+vim.keymap.set('n', '<leader>di', vim.diagnostic.setloclist, {desc = '[d][i]agnostics'})
