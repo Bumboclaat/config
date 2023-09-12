@@ -1,3 +1,3 @@
-require("marcy.packer")
-require("marcy.set")
+require("marcy.lazy")
 require("marcy.remap")
+require("marcy.set")
