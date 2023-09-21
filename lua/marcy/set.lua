@@ -6,6 +6,12 @@ vim.opt.cursorline = true
 -- reduce update time
 vim.opt.updatetime = 1000
 
+vim.opt.signcolumn = 'yes'
+
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+
 -- smart wrap lines
 vim.opt.showbreak = string.rep(" ", 3)
 -- folding
@@ -54,3 +60,5 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+vim.cmd [[colorscheme kanagawa]]
