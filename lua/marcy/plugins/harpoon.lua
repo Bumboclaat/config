@@ -15,19 +15,19 @@ return {
                 },
             },
             -- Navigation
-            ['<C-1>'] = {
+            ['<M-h>'] = {
                 function() require('harpoon.ui').nav_file(1) end,
                 'Go to File 1',
             },
-            ['<C-2>'] = {
+            ['<M-j>'] = {
                 function() require('harpoon.ui').nav_file(2) end,
                 'Go to File 2',
             },
-            ['<C-3>'] = {
+            ['<M-k>'] = {
                 function() require('harpoon.ui').nav_file(3) end,
                 'Go to File 3',
             },
-            ['<C-4>'] = {
+            ['<M-l>'] = {
                 function() require('harpoon.ui').nav_file(4) end,
                 'Go to File 4',
             },
