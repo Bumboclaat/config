@@ -62,3 +62,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.cmd [[colorscheme kanagawa]]
+
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"

@@ -18,6 +18,11 @@ return {
       { noremap = true }
     )
     local lga_actions = require('telescope-live-grep-args.actions')
+    local make_entry = require('telescope.make_entry')
+
+    local quickfix_entry_maker = make_entry.gen_from_quickfix({
+      fname_width = 0.5,
+    })
 
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
@@ -42,6 +47,8 @@ return {
             '--hidden',
           },
         },
+        lsp_references = { entry_maker = quickfix_entry_maker },
+        quickfix = { entry_maker = quickfix_entry_maker },
       },
       extensions = {
         live_grep_args = {
