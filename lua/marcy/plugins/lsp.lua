@@ -9,6 +9,42 @@ return {
     -- Useful status updates for LSP
     'j-hui/fidget.nvim',
   },
+
+  opts = {
+    inlay_hints = { enabled = true },
+    servers = {
+      tsserver = {
+        settings = {
+          typescript = {
+            inlayHints = {
+              -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = 'all',
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true, -- false
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = true -- false
+            }
+          },
+          javascript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = 'all',
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = true
+            }
+          },
+        },
+      },
+    },
+  },
+
   config = function()
     -- LSP settings.
     --  This function gets run when an LSP connects to a particular buffer.
@@ -38,10 +74,8 @@ return {
       nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
       nmap('<leader>f', vim.lsp.buf.format, '[F]ormat')
       nmap('<leader>pf', '<Cmd>:Prettier<CR>')
-      nmap('<leader>t', '<Cmd>:Neotree toggle<CR>')
       nmap('<leader>nc', '<Cmd>:Telescope neoclip<CR>')
       nmap('<leader>fb', '<Cmd>:Telescope file_browser path=%:p:h select_buffer=true<CR>')
-      nmap('<leader>tt', '<Cmd>:ToggleTerm<CR>')
 
       -- See `:help K` for why this keymap
       nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -63,6 +97,29 @@ return {
           vim.lsp.buf.formatting()
         end
       end, { desc = 'Format current buffer with LSP' })
+
+      local ts_inlay_hint_options = {
+        includeInlayParameterNameHints = 'all',
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      }
+
+      require('typescript').setup({
+        server = {
+
+          on_attach = function(client)
+            client.server_capabilities.documentFormattingProvider = false
+          end,
+        },
+        settings = {
+          typescript = { inlayHints = ts_inlay_hint_options },
+          javascript = { inlayHints = ts_inlay_hint_options },
+        },
+      })
     end
 
     -- Setup mason so it can manage external tooling
@@ -88,6 +145,7 @@ return {
         capabilities = capabilities,
       }
     end
+
 
     -- setup svelte server
     require 'lspconfig'.svelte.setup {}
