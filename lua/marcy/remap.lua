@@ -2,6 +2,7 @@
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -60,18 +61,18 @@ vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = '[G]it [F]Files' })
 vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, { desc = '[G]it [C]ommits' })
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').quickfix, { desc = 'Quick [F]ix [F]iles' })
-vim.keymap.set('n', '<leader>dv', '<Cmd>:DiffviewOpen<CR>', { desc = 'open [D]iff [V]iew'})
-vim.keymap.set('n', '<leader>dc', '<Cmd>:DiffviewClose<CR>', { desc = 'open [D]iff [C]lose'})
-vim.keymap.set('n', '<leader>dm', '<Cmd>:DiffviewOpen origin/main...HEAD<CR>', { desc = 'open [D]iff [M]ain'})
+vim.keymap.set('n', '<leader>dv', '<Cmd>:DiffviewOpen<CR>', { desc = 'open [D]iff [V]iew' })
+vim.keymap.set('n', '<leader>dc', '<Cmd>:DiffviewClose<CR>', { desc = 'open [D]iff [C]lose' })
+vim.keymap.set('n', '<leader>dm', '<Cmd>:DiffviewOpen origin/main...HEAD<CR>', { desc = 'open [D]iff [M]ain' })
 vim.keymap.set('n', '<leader>nc', '<Cmd>:Telescope neoclip<CR>')
 vim.keymap.set('n', '<leader>fb', '<Cmd>:Telescope file_browser path=%:p:h select_buffer=true<CR>')
 
 vim.keymap.set('n', '<leader><leader>c', vim.cmd.up)
-vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>', {desc = '[Q]uit Buffer'})
-vim.keymap.set('n', '<leader>Q', '<Cmd>:only<CR>', {desc = 'Quit Other Windows'})
-vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>', {desc = '[P]rettier [F]ormat'})
-vim.keymap.set('n', '<leader>t', '<Cmd>:Neotree toggle<CR>', {desc = '[T]oggle Neotree'})
-vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>',{desc = '[T]oggle [T]erminal'})
+vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>', { desc = '[Q]uit Buffer' })
+vim.keymap.set('n', '<leader>Q', '<Cmd>:only<CR>', { desc = 'Quit Other Windows' })
+vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>', { desc = '[P]rettier [F]ormat' })
+vim.keymap.set('n', '<leader>t', '<Cmd>:Neotree toggle<CR>', { desc = '[T]oggle Neotree' })
+vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>', { desc = '[T]oggle [T]erminal' })
 
 -- lsp remaps
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = '[R]e[n]ame' })
@@ -129,7 +130,12 @@ vim.keymap.set('n', '<C-.>', '<C-W>>')
 
 
 -- Diagnostic keymaps
-vim.keymap.set('n', 'ge', vim.diagnostic.goto_next, {desc = '[G]o to next [e]rror'})
-vim.keymap.set('n', 'gE', vim.diagnostic.goto_prev, {desc = '[G]o to previous [E]rror'})
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, {desc = 'Open [e]rror float'})
-vim.keymap.set('n', '<leader>di', vim.diagnostic.setloclist, {desc = '[d][i]agnostics'})
+vim.keymap.set('n', 'ge', vim.diagnostic.goto_next, { desc = '[G]o to next [e]rror' })
+vim.keymap.set('n', 'gE', vim.diagnostic.goto_prev, { desc = '[G]o to previous [E]rror' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open [e]rror float' })
+vim.keymap.set('n', '<leader>di', vim.diagnostic.setloclist, { desc = '[d][i]agnostics' })
+
+vim.keymap.set('n', '<leader>tl', '<cmd>TestLast<cr>', { desc = 'Run previous test again' })
+vim.keymap.set('n', '<leader>tf', '<cmd>TestFile<cr>', { desc = 'Run tests in file' })
+vim.keymap.set('n', '<leader>tn', '<cmd>TestNearest<cr>', { desc = 'Run test close to cursor' })
+vim.keymap.set('n', '<leader>tv', '<cmd>TestVisit<cr>', { desc = 'Open test close to cursor' })

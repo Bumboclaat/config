@@ -127,7 +127,7 @@ return {
 
     -- Enable the following language servers
     -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-    local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls', 'dartls', 'tflint',
+    local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls', 'tflint',
       'terraformls' }
 
     -- Ensure the servers above are installed
@@ -147,6 +147,23 @@ return {
     end
 
 
+    -- setup eslint server
+    require 'lspconfig'.eslint.setup {}
+    -- require 'lspconfig'.eslint.setup({
+    --   settings = {
+    --     packageManager = 'npm'
+    --   },
+    --   on_attach = function(client, bufnr)
+    --     vim.api.nvim_create_autocmd("BufWritePre", {
+    --       buffer = bufnr,
+    --       command = "EslintFixAll",
+    --     })
+    --  end,
+    -- })
+
+
+    -- -- setup dart server
+    -- require 'lspconfig'.dartls.setup {}
     -- setup svelte server
     require 'lspconfig'.svelte.setup {}
   end
