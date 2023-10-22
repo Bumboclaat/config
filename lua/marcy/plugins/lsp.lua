@@ -148,18 +148,18 @@ return {
 
 
     -- setup eslint server
-    require 'lspconfig'.eslint.setup {}
-    -- require 'lspconfig'.eslint.setup({
-    --   settings = {
-    --     packageManager = 'npm'
-    --   },
-    --   on_attach = function(client, bufnr)
-    --     vim.api.nvim_create_autocmd("BufWritePre", {
-    --       buffer = bufnr,
-    --       command = "EslintFixAll",
-    --     })
-    --  end,
-    -- })
+    -- require 'lspconfig'.eslint.setup {}
+    require 'lspconfig'.eslint.setup({
+      settings = {
+        packageManager = 'npm'
+      },
+      on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          command = "EslintFixAll",
+        })
+     end,
+    })
 
 
     -- -- setup dart server

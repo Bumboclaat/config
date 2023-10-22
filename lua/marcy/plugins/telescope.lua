@@ -79,6 +79,9 @@ return {
           show_builtin_git_pickers = false,
         },
       },
+
+      -- Enable telescope fzf native, if installed
+      pcall(require('telescope').load_extension, 'fzf')
     })
 
     require('telescope').load_extension('live_grep_args')

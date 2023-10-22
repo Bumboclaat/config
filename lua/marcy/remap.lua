@@ -1,8 +1,3 @@
--- [[ Basic Keymaps ]]
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -34,9 +29,6 @@ vim.api.nvim_set_keymap(
 	{ noremap = true }
 )
 
--- Enable telescope fzf native, if installed
-pcall(require('telescope').load_extension, 'fzf')
-
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -61,9 +53,9 @@ vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = '[G]it [F]Files' })
 vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, { desc = '[G]it [C]ommits' })
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').quickfix, { desc = 'Quick [F]ix [F]iles' })
-vim.keymap.set('n', '<leader>dv', '<Cmd>:DiffviewOpen<CR>', { desc = 'open [D]iff [V]iew' })
-vim.keymap.set('n', '<leader>dc', '<Cmd>:DiffviewClose<CR>', { desc = 'open [D]iff [C]lose' })
-vim.keymap.set('n', '<leader>dm', '<Cmd>:DiffviewOpen origin/main...HEAD<CR>', { desc = 'open [D]iff [M]ain' })
+vim.keymap.set('n', '<leader>dv', '<Cmd>:DiffviewOpen<CR>', { desc = '[D]iff [V]iew' })
+vim.keymap.set('n', '<leader>dc', '<Cmd>:DiffviewClose<CR>', { desc = '[D]iff [C]lose' })
+vim.keymap.set('n', '<leader>dm', '<Cmd>:DiffviewOpen origin/main...HEAD<CR>', { desc = '[D]iff [M]ain' })
 vim.keymap.set('n', '<leader>nc', '<Cmd>:Telescope neoclip<CR>')
 vim.keymap.set('n', '<leader>fb', '<Cmd>:Telescope file_browser path=%:p:h select_buffer=true<CR>')
 
@@ -139,3 +131,5 @@ vim.keymap.set('n', '<leader>tl', '<cmd>TestLast<cr>', { desc = 'Run previous te
 vim.keymap.set('n', '<leader>tf', '<cmd>TestFile<cr>', { desc = 'Run tests in file' })
 vim.keymap.set('n', '<leader>tn', '<cmd>TestNearest<cr>', { desc = 'Run test close to cursor' })
 vim.keymap.set('n', '<leader>tv', '<cmd>TestVisit<cr>', { desc = 'Open test close to cursor' })
+
+vim.keymap.set('n', '<leader>gt', '<cmd>:A<cr>', { desc = '[G]o [T]o Alternate' })
