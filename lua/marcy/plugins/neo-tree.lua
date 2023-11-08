@@ -29,6 +29,9 @@ return {
         },
         follow
       },
+      window = {
+          width = 60,
+      },
       filters = {
       },
     })

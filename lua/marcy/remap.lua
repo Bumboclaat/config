@@ -70,7 +70,8 @@ vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>', { desc = '[T]oggle [T]
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = '[R]e[n]ame' })
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ction' })
 
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = '[G]oto [D]efinition' })
+vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, { desc = '[G]oto [D]efinition' })
+-- vim.keymap.set('n', 'gd', vim.lsp.buf.definition(), { desc = '[G]oto [D]efinition' })
 vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = '[G]oto [R]eferences' })
 vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { desc = '[G]oto [I]mplementation' })
 vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, { desc = 'Type [D]efinition' })
@@ -120,6 +121,7 @@ vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
 vim.keymap.set('n', '<C-,>', '<C-W><')
 vim.keymap.set('n', '<C-.>', '<C-W>>')
 
+vim.keymap.set('n', '<leader>cf', '<cmd>:cexpr[]<cr>', { desc = '[C]lear Quick[F]ix List' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', 'ge', vim.diagnostic.goto_next, { desc = '[G]o to next [e]rror' })
@@ -133,3 +135,18 @@ vim.keymap.set('n', '<leader>tn', '<cmd>TestNearest<cr>', { desc = 'Run test clo
 vim.keymap.set('n', '<leader>tv', '<cmd>TestVisit<cr>', { desc = 'Open test close to cursor' })
 
 vim.keymap.set('n', '<leader>gt', '<cmd>:A<cr>', { desc = '[G]o [T]o Alternate' })
+
+-- refactoring remaps
+vim.keymap.set("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end, { desc = 'Extract Function'})
+vim.keymap.set("x", "<leader>rf", function() require('refactoring').refactor('Extract Function To File') end, {desc = 'Extract Function to File'})
+-- Extract function supports only visual mode
+vim.keymap.set("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end, {desc = 'Extract Variable'})
+-- Extract variable supports only visual mode
+vim.keymap.set("n", "<leader>rI", function() require('refactoring').refactor('Inline Function') end, {desc = 'Inline Function'})
+-- Inline func supports only normal
+vim.keymap.set({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end, {desc = 'Inline Variable'})
+-- Inline var supports both normal and visual mode
+
+vim.keymap.set("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end, {desc = 'Extract Block'})
+vim.keymap.set("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end, {desc = 'Extract Block to File'})
+-- Extract block supports only normal mode

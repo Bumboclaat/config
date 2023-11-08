@@ -17,6 +17,7 @@ vim.opt.showbreak = string.rep(" ", 3)
 -- folding
 vim.opt.foldmethod = "indent"
 vim.opt.foldlevel = 1337
+vim.opt.foldlevelstart = 1337
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -61,9 +62,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
-vim.cmd [[colorscheme kanagawa]]
+-- vim.cmd [[colorscheme kanagawa]]
 -- vim.cmd [[colorscheme kanagawa-wave]]
--- vim.cmd [[colorscheme kanagawa-dragon]]
+vim.cmd [[colorscheme kanagawa-dragon]]
 -- vim.cmd [[colorscheme kanagawa-lotus]]
 
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"

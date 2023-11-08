@@ -5,6 +5,12 @@ return {
     "nvim-telescope/telescope-live-grep-args.nvim",
     'nvim-telescope/telescope-file-browser.nvim',
     'AckslD/nvim-neoclip.lua',
+    'aaronhallaert/advanced-git-search.nvim',
+    {
+      -- Native sorter for vastly improved performance
+      'nvim-telescope/telescope-fzf-native.nvim',
+      build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    },
   },
 
   config = function() -- load refactoring Telescope extension
@@ -51,6 +57,12 @@ return {
         quickfix = { entry_maker = quickfix_entry_maker },
       },
       extensions = {
+        fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = 'smart_case',
+        },
         live_grep_args = {
           vimgrep_arguments = {
             'rg',

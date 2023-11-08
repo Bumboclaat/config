@@ -5,45 +5,42 @@ return {
     -- Automatically install LSPs to stdpath for neovim
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
-
-    -- Useful status updates for LSP
-    'j-hui/fidget.nvim',
   },
 
-  opts = {
-    inlay_hints = { enabled = true },
-    servers = {
-      tsserver = {
-        settings = {
-          typescript = {
-            inlayHints = {
-              -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = 'all',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true, -- false
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayVariableTypeHintsWhenTypeMatchesName = true -- false
-            }
-          },
-          javascript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = 'all',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayVariableTypeHintsWhenTypeMatchesName = true
-            }
-          },
-        },
-      },
-    },
-  },
+  -- opts = {
+  --   inlay_hints = { enabled = true },
+  --   servers = {
+  --     tsserver = {
+  --       settings = {
+  --         typescript = {
+  --           inlayHints = {
+  --             -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
+  --             includeInlayEnumMemberValueHints = true,
+  --             includeInlayFunctionLikeReturnTypeHints = true,
+  --             includeInlayFunctionParameterTypeHints = true,
+  --             includeInlayParameterNameHints = 'all',
+  --             includeInlayParameterNameHintsWhenArgumentMatchesName = true, -- false
+  --             includeInlayPropertyDeclarationTypeHints = true,
+  --             includeInlayVariableTypeHints = true,
+  --             includeInlayVariableTypeHintsWhenTypeMatchesName = true -- false
+  --           }
+  --         },
+  --         javascript = {
+  --           inlayHints = {
+  --             includeInlayEnumMemberValueHints = true,
+  --             includeInlayFunctionLikeReturnTypeHints = true,
+  --             includeInlayFunctionParameterTypeHints = true,
+  --             includeInlayParameterNameHints = 'all',
+  --             includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+  --             includeInlayPropertyDeclarationTypeHints = true,
+  --             includeInlayVariableTypeHints = true,
+  --             includeInlayVariableTypeHintsWhenTypeMatchesName = true
+  --           }
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 
   config = function()
     -- LSP settings.
@@ -98,28 +95,29 @@ return {
         end
       end, { desc = 'Format current buffer with LSP' })
 
-      local ts_inlay_hint_options = {
-        includeInlayParameterNameHints = 'all',
-        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayVariableTypeHints = true,
-        includeInlayPropertyDeclarationTypeHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayEnumMemberValueHints = true,
-      }
-
-      require('typescript').setup({
-        server = {
-
-          on_attach = function(client)
-            client.server_capabilities.documentFormattingProvider = false
-          end,
-        },
-        settings = {
-          typescript = { inlayHints = ts_inlay_hint_options },
-          javascript = { inlayHints = ts_inlay_hint_options },
-        },
-      })
+      -- local ts_inlay_hint_options = {
+      --   enabled = true,
+      --   includeInlayParameterNameHints = 'all',
+      --   includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      --   includeInlayFunctionParameterTypeHints = true,
+      --   includeInlayVariableTypeHints = true,
+      --   includeInlayPropertyDeclarationTypeHints = true,
+      --   includeInlayFunctionLikeReturnTypeHints = true,
+      --   includeInlayEnumMemberValueHints = true,
+      -- }
+      --
+      -- require('typescript').setup({
+      --   server = {
+      --
+      --     on_attach = function(client)
+      --       client.server_capabilities.documentFormattingProvider = false
+      --     end,
+      --   },
+      --   settings = {
+      --     typescript = { inlayHints = ts_inlay_hint_options },
+      --     javascript = { inlayHints = ts_inlay_hint_options },
+      --   },
+      -- })
     end
 
     -- Setup mason so it can manage external tooling
@@ -146,23 +144,20 @@ return {
       }
     end
 
-
     -- setup eslint server
     -- require 'lspconfig'.eslint.setup {}
     require 'lspconfig'.eslint.setup({
       settings = {
         packageManager = 'npm'
       },
-      on_attach = function(client, bufnr)
+      on_attach = function(_, bufnr)
         vim.api.nvim_create_autocmd("BufWritePre", {
           buffer = bufnr,
           command = "EslintFixAll",
         })
-     end,
+      end,
     })
 
-
-    -- -- setup dart server
     -- require 'lspconfig'.dartls.setup {}
     -- setup svelte server
     require 'lspconfig'.svelte.setup {}
