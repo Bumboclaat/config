@@ -150,3 +150,6 @@ vim.keymap.set({ "n", "x" }, "<leader>ri", function() require('refactoring').ref
 vim.keymap.set("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end, {desc = 'Extract Block'})
 vim.keymap.set("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end, {desc = 'Extract Block to File'})
 -- Extract block supports only normal mode
+
+vim.keymap.set('v', '<leader>]', ':Gen<CR>')
+vim.keymap.set('n', '<leader>]', ':Gen<CR>')
