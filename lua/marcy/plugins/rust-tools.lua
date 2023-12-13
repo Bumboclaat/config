@@ -1,6 +1,7 @@
 return {
 
   'simrat39/rust-tools.nvim',
+  event = 'VeryLazy',
   config = function()
     require('rust-tools').setup({
       tools = { autoSetHints = false, hover_with_actions = false },

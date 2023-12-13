@@ -43,6 +43,7 @@ return {
   -- },
 
   config = function()
+    local lsp_config = require 'lspconfig'
     -- LSP settings.
     --  This function gets run when an LSP connects to a particular buffer.
     local on_attach = function(_, bufnr)
@@ -126,7 +127,7 @@ return {
     -- Enable the following language servers
     -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
     local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls', 'tflint',
-      'terraformls' }
+      'terraformls', 'jdtls', 'html'  }
 
     -- Ensure the servers above are installed
     require('mason-lspconfig').setup {
@@ -145,8 +146,8 @@ return {
     end
 
     -- setup eslint server
-    -- require 'lspconfig'.eslint.setup {}
-    require 'lspconfig'.eslint.setup({
+    -- lsp_config.eslint.setup {}
+    lsp_config.eslint.setup({
       settings = {
         packageManager = 'npm'
       },
@@ -158,17 +159,28 @@ return {
       end,
     })
 
-    -- require 'lspconfig'.dartls.setup {}
+    -- lsp_config.dartls.setup {}
     -- setup svelte server
-    require 'lspconfig'.svelte.setup {}
+    lsp_config.svelte.setup {}
 
     -- setup terraform lsp
-    require 'lspconfig'.terraformls.setup {}
+    lsp_config.terraformls.setup {}
     vim.api.nvim_create_autocmd({ "BufWritePre" }, {
       pattern = { "*.tf", "*.tfvars" },
       callback = function()
         vim.lsp.buf.format()
       end,
     })
+
+    lsp_config.jdtls.setup {
+      cmd = {
+        "jdtls",
+        "--jvm-arg=" .. string.format("-javaagent:%s", vim.fn.expand "$MASON/share/jdtls/lombok.jar"),
+      },
+    }
+
+    lsp_config.gopls.setup {}
+    lsp_config.templ.setup {}
+    lsp_config.htmx.setup {}
   end
 }

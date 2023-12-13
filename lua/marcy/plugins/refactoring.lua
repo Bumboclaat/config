@@ -5,6 +5,7 @@ return {
     { "nvim-treesitter/nvim-treesitter" }
   },
 
+  event = "VeryLazy",
   config = function()
     require('refactoring').setup({})
     -- load refactoring Telescope extension

@@ -3,7 +3,13 @@ return {
   'hrsh7th/nvim-cmp',
   dependencies = {
     -- Snippet Engine & its associated nvim-cmp source
-    'L3MON4D3/LuaSnip',
+    {
+      "L3MON4D3/LuaSnip",
+      -- follow latest release.
+      version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+      -- install jsregexp (optional!).
+      build = "make install_jsregexp"
+    },
     'saadparwaiz1/cmp_luasnip',
 
     -- Adds LSP completion capabilities
@@ -12,7 +18,6 @@ return {
     -- Adds a number of user-friendly snippets
     'rafamadriz/friendly-snippets',
   },
-
   config = function()
     -- nvim-cmp setup
     local cmp = require 'cmp'
@@ -36,6 +41,7 @@ return {
           behavior = cmp.ConfirmBehavior.Replace,
           select = true,
         },
+        -- comment out if using github copilot
         ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()

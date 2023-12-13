@@ -1,12 +1,18 @@
 return {
     'j-hui/fidget.nvim',
-    tag = 'legacy',
     event = 'LspAttach',
     config = function()
-        require('fidget').setup({
-            text = {
-                spinner = 'dots',
-            },
+        local fidget = require('fidget')
+        fidget.setup({
+            progress = {
+                display = {
+                    overrides = {
+                        rust_analyzer = {
+                            icon = fidget.progress.display.for_icon(fidget.spinner.animate("arrow", 2.5), "🦀"),
+                        },
+                    }
+                }
+            }
         })
     end,
 }

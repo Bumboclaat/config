@@ -20,7 +20,7 @@ vim.opt.foldlevel = 1337
 vim.opt.foldlevelstart = 1337
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 vim.o.incsearch = true
 
 -- Make line numbers default
@@ -66,6 +66,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- vim.cmd [[colorscheme kanagawa-wave]]
 vim.cmd [[colorscheme kanagawa-dragon]]
 -- vim.cmd [[colorscheme kanagawa-lotus]]
+-- vim.cmd [[colorscheme catppuccin-latte]]
 
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"

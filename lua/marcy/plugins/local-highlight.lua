@@ -1,5 +1,6 @@
 return {
     'tzachar/local-highlight.nvim',
+    event = 'VeryLazy',
     config = function()
         require('local-highlight').setup()
         vim.api.nvim_create_autocmd('BufRead', {

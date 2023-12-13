@@ -29,6 +29,7 @@ vim.api.nvim_set_keymap(
 	{ noremap = true }
 )
 
+-- vim.keymap.set('n', '<leader>r', ":so ~/.config/nvim/init.lua<CR>", { desc = '[R]reload Config' })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -53,6 +54,7 @@ vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = '[G]it [F]Files' })
 vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, { desc = '[G]it [C]ommits' })
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').quickfix, { desc = 'Quick [F]ix [F]iles' })
+vim.keymap.set('n', '<leader>cs', require('telescope.builtin').colorscheme, { desc = '[C]olor [S]cheme' })
 vim.keymap.set('n', '<leader>dv', '<Cmd>:DiffviewOpen<CR>', { desc = '[D]iff [V]iew' })
 vim.keymap.set('n', '<leader>dc', '<Cmd>:DiffviewClose<CR>', { desc = '[D]iff [C]lose' })
 vim.keymap.set('n', '<leader>dm', '<Cmd>:DiffviewOpen origin/main...HEAD<CR>', { desc = '[D]iff [M]ain' })
@@ -110,7 +112,10 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', 'gb', '<C-o>')
 vim.keymap.set('n', 'gf', '<C-i>')
 
--- move between splits
+-- splits
+-- vim.keymap.set('n', '<leader>v', ':vsplit')
+-- vim.keymap.set('n', '<leader>h', ':split')
+
 vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
 vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
 vim.keymap.set('n', '<C-K>', '<C-W><C-K>')

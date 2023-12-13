@@ -9,7 +9,6 @@ return {
     {
       -- Native sorter for vastly improved performance
       'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
     },
   },
 
@@ -55,6 +54,9 @@ return {
         },
         lsp_references = { entry_maker = quickfix_entry_maker },
         quickfix = { entry_maker = quickfix_entry_maker },
+        colorscheme = {
+          enable_preview = true
+        }
       },
       extensions = {
         fzf = {
