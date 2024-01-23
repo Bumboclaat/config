@@ -62,6 +62,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+vim.opt.splitright = true
+
 -- vim.cmd [[colorscheme kanagawa]]
 -- vim.cmd [[colorscheme kanagawa-wave]]
 vim.cmd [[colorscheme kanagawa-dragon]]
@@ -70,3 +72,8 @@ vim.cmd [[colorscheme kanagawa-dragon]]
 
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+
+-- vim.opt.list = true
+-- vim.opt.listchars = {
+--   eol = "⏎"
+-- }

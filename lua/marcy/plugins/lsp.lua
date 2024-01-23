@@ -127,7 +127,7 @@ return {
     -- Enable the following language servers
     -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
     local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls', 'tflint',
-      'terraformls', 'jdtls', 'html'  }
+      'terraformls', 'jdtls', 'html', 'zls', 'htmx', 'golangci_lint_ls', 'templ' }
 
     -- Ensure the servers above are installed
     require('mason-lspconfig').setup {
@@ -172,6 +172,8 @@ return {
       end,
     })
 
+    lsp_config.zls.setup {}
+
     lsp_config.jdtls.setup {
       cmd = {
         "jdtls",
@@ -180,7 +182,9 @@ return {
     }
 
     lsp_config.gopls.setup {}
+
     lsp_config.templ.setup {}
+
     lsp_config.htmx.setup {}
   end
 }
