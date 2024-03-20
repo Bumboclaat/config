@@ -7,41 +7,6 @@ return {
     'williamboman/mason-lspconfig.nvim',
   },
 
-  -- opts = {
-  --   inlay_hints = { enabled = true },
-  --   servers = {
-  --     tsserver = {
-  --       settings = {
-  --         typescript = {
-  --           inlayHints = {
-  --             -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
-  --             includeInlayEnumMemberValueHints = true,
-  --             includeInlayFunctionLikeReturnTypeHints = true,
-  --             includeInlayFunctionParameterTypeHints = true,
-  --             includeInlayParameterNameHints = 'all',
-  --             includeInlayParameterNameHintsWhenArgumentMatchesName = true, -- false
-  --             includeInlayPropertyDeclarationTypeHints = true,
-  --             includeInlayVariableTypeHints = true,
-  --             includeInlayVariableTypeHintsWhenTypeMatchesName = true -- false
-  --           }
-  --         },
-  --         javascript = {
-  --           inlayHints = {
-  --             includeInlayEnumMemberValueHints = true,
-  --             includeInlayFunctionLikeReturnTypeHints = true,
-  --             includeInlayFunctionParameterTypeHints = true,
-  --             includeInlayParameterNameHints = 'all',
-  --             includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-  --             includeInlayPropertyDeclarationTypeHints = true,
-  --             includeInlayVariableTypeHints = true,
-  --             includeInlayVariableTypeHintsWhenTypeMatchesName = true
-  --           }
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
-
   config = function()
     local lsp_config = require 'lspconfig'
     -- LSP settings.
@@ -95,30 +60,6 @@ return {
           vim.lsp.buf.formatting()
         end
       end, { desc = 'Format current buffer with LSP' })
-
-      -- local ts_inlay_hint_options = {
-      --   enabled = true,
-      --   includeInlayParameterNameHints = 'all',
-      --   includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-      --   includeInlayFunctionParameterTypeHints = true,
-      --   includeInlayVariableTypeHints = true,
-      --   includeInlayPropertyDeclarationTypeHints = true,
-      --   includeInlayFunctionLikeReturnTypeHints = true,
-      --   includeInlayEnumMemberValueHints = true,
-      -- }
-      --
-      -- require('typescript').setup({
-      --   server = {
-      --
-      --     on_attach = function(client)
-      --       client.server_capabilities.documentFormattingProvider = false
-      --     end,
-      --   },
-      --   settings = {
-      --     typescript = { inlayHints = ts_inlay_hint_options },
-      --     javascript = { inlayHints = ts_inlay_hint_options },
-      --   },
-      -- })
     end
 
     -- Setup mason so it can manage external tooling
@@ -145,6 +86,32 @@ return {
       }
     end
 
+    -- anable TS inlay hints
+    local ts_inlay_hint_options = {
+      enabled = true,
+      includeInlayParameterNameHints = 'all',
+      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayVariableTypeHints = true,
+      includeInlayPropertyDeclarationTypeHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayEnumMemberValueHints = true,
+    }
+
+    lsp_config.tsserver.setup({
+      server = {
+        on_attach = function(client, bufnr)
+          client.server_capabilities.documentFormattingProvider = false
+          require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+        end,
+      },
+      root_dir = lsp_config.util.root_pattern('package.json'),
+      settings = {
+        typescript = { inlayHints = ts_inlay_hint_options },
+        javascript = { inlayHints = ts_inlay_hint_options },
+      },
+    })
+
     -- setup eslint server
     -- lsp_config.eslint.setup {}
     lsp_config.eslint.setup({
@@ -157,9 +124,19 @@ return {
           command = "EslintFixAll",
         })
       end,
+      filetypes = {
+        'javascript',
+        'javascriptreact',
+        'javascript.jsx',
+        'typescript',
+        'typescriptreact',
+        'typescript.tsx',
+        'svelte',
+        'html',
+      },
     })
 
-    -- lsp_config.dartls.setup {}
+    lsp_config.dartls.setup {}
     -- setup svelte server
     lsp_config.svelte.setup {}
 

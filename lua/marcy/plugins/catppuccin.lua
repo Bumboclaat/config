@@ -5,5 +5,5 @@ return {
     priority = 1000,
     config = function()
         flavour = "latte"
-    end
+    end,
 }

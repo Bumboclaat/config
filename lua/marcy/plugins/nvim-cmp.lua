@@ -15,6 +15,9 @@ return {
     -- Adds LSP completion capabilities
     'hrsh7th/cmp-nvim-lsp',
 
+    -- Adds CMD completion capabilities
+    'hrsh7th/cmp-cmdline',
+
     -- Adds a number of user-friendly snippets
     'rafamadriz/friendly-snippets',
   },
@@ -66,5 +69,27 @@ return {
         { name = 'luasnip' },
       },
     }
+    -- `/` cmdline setup.
+    cmp.setup.cmdline('/', {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = 'buffer' }
+      }
+    })
+
+    -- `:` cmdline setup.
+    cmp.setup.cmdline(':', {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = cmp.config.sources({
+        { name = 'path' }
+      }, {
+        {
+          name = 'cmdline',
+          option = {
+            ignore_cmds = { 'Man', '!' }
+          }
+        }
+      })
+    })
   end
 }

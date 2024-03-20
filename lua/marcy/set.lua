@@ -64,9 +64,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.opt.splitright = true
 
--- vim.cmd [[colorscheme kanagawa]]
+vim.cmd [[colorscheme kanagawa]]
 -- vim.cmd [[colorscheme kanagawa-wave]]
-vim.cmd [[colorscheme kanagawa-dragon]]
+-- vim.cmd [[colorscheme kanagawa-dragon]]
 -- vim.cmd [[colorscheme kanagawa-lotus]]
 -- vim.cmd [[colorscheme catppuccin-latte]]
 

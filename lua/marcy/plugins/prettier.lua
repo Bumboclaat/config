@@ -1,5 +1,6 @@
 return {
   'MunifTanjim/prettier.nvim',
+  enabled = false,
   config = function()
     local prettier = require("prettier")
 
