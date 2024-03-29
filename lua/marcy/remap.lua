@@ -17,7 +17,6 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
-
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 
 
@@ -124,8 +123,8 @@ vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
 
 
 -- adjust window size
-vim.keymap.set('n', '<C-,>', '<C-W><')
-vim.keymap.set('n', '<C-.>', '<C-W>>')
+vim.keymap.set('n', '<M-,>', '<C-W><')
+vim.keymap.set('n', '<M-.>', '<C-W>>')
 
 vim.keymap.set('n', '<leader>cf', '<cmd>:cexpr[]<cr>', { desc = '[C]lear Quick[F]ix List' })
 
@@ -166,3 +165,10 @@ vim.keymap.set("n", "<leader>rbf", function() require('refactoring').refactor('E
 
 vim.keymap.set('v', '<leader>]', ':Gen<CR>')
 vim.keymap.set('n', '<leader>]', ':Gen<CR>')
+
+
+vim.keymap.set('n', "<C-h>", "<cmd>TmuxNavigateLeft<cr>")
+vim.keymap.set('n', "<C-j>", "<cmd>TmuxNavigateDown<cr>")
+vim.keymap.set('n', "<C-k>", "<cmd>TmuxNavigateUp<cr>")
+vim.keymap.set('n', "<C-l>", "<cmd>TmuxNavigateRight<cr>")
+vim.keymap.set('n', "<C-\\>", "<cmd>TmuxNavigatePrevious<cr>")

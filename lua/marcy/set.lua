@@ -73,6 +73,17 @@ vim.cmd [[colorscheme kanagawa]]
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 
+
+local function loadRhubarbCommands()
+    vim.cmd([[
+        command! -buffer -nargs=* -complete=file GBrowse call luaeval('require("rhubarb").browse(_A[1], "netrw")', expand("<args>"))
+    ]])
+end
+
+vim.cmd([[
+    autocmd FileType gitcommit lua loadRhubarbCommands()
+]])
+
 -- vim.opt.list = true
 -- vim.opt.listchars = {
 --   eol = "⏎"

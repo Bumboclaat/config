@@ -1,11 +1,14 @@
 return {
   'vim-test/vim-test',
+  dependencies = {
+    "preservim/vimux",
+  },
   event = 'VeryLazy',
   build = function()
     pcall(function() vim.cmd([[UpdateRemotePlugins]]) end)
   end,
   config = function()
-    vim.g['test#strategy'] = 'toggleterm'
+    vim.g['test#strategy'] = 'vimux'
 
     local configureJSTest = function()
       vim.g['test#javascript#jest#executable'] = 'npm test'

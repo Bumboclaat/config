@@ -50,6 +50,7 @@ return {
             '--line-number',
             '--column',
             '--hidden',
+            '--smart-case',
           },
         },
         lsp_references = { entry_maker = quickfix_entry_maker },
