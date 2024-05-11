@@ -6,6 +6,7 @@ local plugin = {
   dependencies = {
     'rcarriga/nvim-dap-ui',
     'theHamsta/nvim-dap-virtual-text',
+    "nvim-neotest/nvim-nio",
     'leoluz/nvim-dap-go',
     {
       'jay-babu/mason-nvim-dap.nvim',
@@ -43,23 +44,35 @@ local plugin = {
     { "<leader>dw", function() require("dap.ui.widgets").hover() end,                                     desc = "Widgets" },
   },
   config = function()
+    local dap = require("dap")
+    local mason_registry = require("mason-registry")
     -- Mason integration
     require('mason-nvim-dap').setup({
       ensure_installed = { 'js-debug-adapter' },
     })
 
-    -- Configure adapters
+    local node_debug_path = mason_registry.get_package("node-debug2-adapter"):get_install_path()
+        .. "/out/src/nodeDebug.js"
+
+    local js_debug_adapter = mason_registry.get_package('js-debug-adapter')
+    local js_debug_adapter_path = js_debug_adapter and js_debug_adapter:get_install_path()
+
+    print('----------------------------------------------------------------------')
+    print(js_debug_adapter)
+    print(js_debug_adapter_path)
+    print('----------------------------------------------------------------------')
+
     require('dap').adapters['pwa-node'] = {
       type = 'server',
       host = '127.0.0.1',
-      port = '${port}',
+      port = '8080',
       executable = {
-        command = 'js-debug-adapter',
+        command = js_debug_adapter_path .. '/js-debug-adapter',
         args = { '${port}', '127.0.0.1' },
       },
     }
 
-    require('dap').configurations.javascript = {
+    require('dap').configurations.typescript = {
       {
         type = 'pwa-node',
         request = 'launch',
@@ -69,18 +82,61 @@ local plugin = {
       },
     }
 
-    require('dap').configurations.javascript = {
+    -- dap.adapters.node2 = {
+    --   type = "executable",
+    --   command = "node",
+    --   args = {
+    --     node_debug_path,
+    --   },
+    -- }
+    --
+    -- dap.configurations.typescript = {
+    --   {
+    --     name = "attach to typescript",
+    --     type = "node2",
+    --     request = "attach",
+    --     port = function()
+    --       return tonumber(vim.fn.input("Debug Port: ", "9229"))
+    --     end,
+    --     cwd = vim.fn.getcwd(),
+    --     sourceMaps = true,
+    --     skipFiles = { "<node_internals>/**", "node_modules/**" },
+    --   },
+    -- }
+
+    dap.adapters.go = function(callback, config)
+      local handle
+      local pid_or_err
+      local port = 3000
+      handle, pid_or_err = vim.loop.spawn('dlv', {
+        args = { 'dap', '-l', '127.0.0.1:' .. port },
+        detached = true,
+      }, function(code)
+        handle:close()
+        print('Delve exited with code', code)
+      end)
+      vim.defer_fn(function()
+        callback({ type = 'server', host = '127.0.0.1', port = port })
+      end, 100) -- Wait 100ms for delve to start
+    end
+
+    dap.configurations.go = {
       {
-        type = 'pwa-node',
+        type = 'go',
+        name = 'Debug',
         request = 'launch',
-        name = 'Launch file',
-        program = '${file}',
-        cwd = '${workspaceFolder}',
+        program = '${file}'
       },
+      {
+        type = 'go',
+        name = 'Debug test', -- Configuration for debugging test files
+        request = 'launch',
+        mode = 'test',
+        program = './${relativeFileDirname}'
+      }
     }
 
     -- UI
-    local dap = require('dap')
     local dapui = require('dapui')
     dapui.setup({
     })

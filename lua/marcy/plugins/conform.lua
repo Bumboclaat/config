@@ -20,7 +20,7 @@ return {
                 ruby = { "standardrb" },
                 markdown = { { "prettierd", "prettier" } },
                 erb = { "htmlbeautifier" },
-                -- html = { "htmlbeautifier" },
+                html = { "prettierd", "prettier" },
                 bash = { "beautysh" },
                 proto = { "buf" },
                 rust = { "rust-analyzer" },
