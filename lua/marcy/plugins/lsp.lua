@@ -9,6 +9,7 @@ return {
 
   config = function()
     local lsp_config = require 'lspconfig'
+
     -- LSP settings.
     --  This function gets run when an LSP connects to a particular buffer.
     local on_attach = function(_, bufnr)
@@ -112,8 +113,30 @@ return {
       },
     })
 
+    -- disable semantic tokens
+    lsp_config.util.default_config = vim.tbl_extend("force", lsp_config.util.default_config,
+      { on_attach = function(client) client.server_capabilities.semanticTokensProvider = nil end })
+
+    -- lsp_config.prettier.setup {
+    --   filetypes = {
+    --     'html',
+    --     'javascript',
+    --     'javascriptreact',
+    --     'javascript.jsx',
+    --     'typescript',
+    --     'typescriptreact',
+    --     'typescript.tsx',
+    --     'svelte'
+    --   },
+    --   on_attach = function(_, bufnr)
+    --     vim.api.nvim_create_autocmd("BufWritePre", {
+    --       buffer = bufnr,
+    --       command = "PrettierFormat",
+    --     })
+    --   end,
+    -- }
+
     -- setup eslint server
-    -- lsp_config.eslint.setup {}
     lsp_config.eslint.setup({
       settings = {
         packageManager = 'npm'

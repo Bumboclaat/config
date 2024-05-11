@@ -65,7 +65,6 @@ vim.keymap.set('n', '<leader>q', '<Cmd>:bd<CR>', { desc = '[Q]uit Buffer' })
 vim.keymap.set('n', '<leader>Q', '<Cmd>:only<CR>', { desc = 'Quit Other Windows' })
 vim.keymap.set('n', '<leader>pf', '<Cmd>:Prettier<CR>', { desc = '[P]rettier [F]ormat' })
 vim.keymap.set('n', '<leader>t', '<Cmd>:Neotree toggle<CR>', { desc = '[T]oggle Neotree' })
-vim.keymap.set('n', '<leader>tt', '<Cmd>:ToggleTerm<CR>', { desc = '[T]oggle [T]erminal' })
 
 -- lsp remaps
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = '[R]e[n]ame' })
@@ -167,8 +166,18 @@ vim.keymap.set('v', '<leader>]', ':Gen<CR>')
 vim.keymap.set('n', '<leader>]', ':Gen<CR>')
 
 
+-- tmux navigator
 vim.keymap.set('n', "<C-h>", "<cmd>TmuxNavigateLeft<cr>")
 vim.keymap.set('n', "<C-j>", "<cmd>TmuxNavigateDown<cr>")
 vim.keymap.set('n', "<C-k>", "<cmd>TmuxNavigateUp<cr>")
 vim.keymap.set('n', "<C-l>", "<cmd>TmuxNavigateRight<cr>")
 vim.keymap.set('n', "<C-\\>", "<cmd>TmuxNavigatePrevious<cr>")
+
+-- trouble
+vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, { desc = 'e[X]ecute Trouble' })
+vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, { desc = 'e[X]ecute Trouble on [W]orkspace' })
+vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end,{ desc = 'e[X]ecute Trouble on [D]ocument' })
+vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end, { desc = 'e[X]ecute Trouble on [Q]uickfix' })
+vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end, { desc = 'e[X]ecute Trouble on [L]oclist' })
+vim.keymap.set("n", "<leader>xn", function() require("trouble").next({skip_groups = true, jump = true}) end, { desc = 'ne[X]t Trouble' })
+vim.keymap.set("n", "<leader>xp", function() require("trouble").previous({skip_groups = true, jump = true}) end, { desc = '[P]revious Trouble' })

@@ -15,7 +15,7 @@ vim.opt.swapfile = false
 -- smart wrap lines
 vim.opt.showbreak = string.rep(" ", 3)
 -- folding
-vim.opt.foldmethod = "indent"
+vim.opt.foldmethod = "expr"
 vim.opt.foldlevel = 1337
 vim.opt.foldlevelstart = 1337
 
@@ -55,11 +55,11 @@ vim.g.loaded_netrwPlugin = 1
 
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+    group = highlight_group,
+    pattern = '*',
 })
 
 vim.opt.splitright = true
@@ -70,19 +70,9 @@ vim.cmd [[colorscheme kanagawa]]
 -- vim.cmd [[colorscheme kanagawa-lotus]]
 -- vim.cmd [[colorscheme catppuccin-latte]]
 
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.opt.foldtext = "nvim_treesitter#foldtext()"
 
-
-local function loadRhubarbCommands()
-    vim.cmd([[
-        command! -buffer -nargs=* -complete=file GBrowse call luaeval('require("rhubarb").browse(_A[1], "netrw")', expand("<args>"))
-    ]])
-end
-
-vim.cmd([[
-    autocmd FileType gitcommit lua loadRhubarbCommands()
-]])
 
 -- vim.opt.list = true
 -- vim.opt.listchars = {
