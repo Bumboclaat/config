@@ -1,6 +1,6 @@
 return {
     "stevearc/conform.nvim",
-    enabled = false,
+    -- enabled = false,
     event = { "BufReadPre", "BufNewFile" },
     config = function()
         local conform = require("conform")
@@ -9,11 +9,11 @@ return {
             formatters_by_ft = {
                 lua = { "stylua" },
                 svelte = { { "prettierd", "prettier" } },
-                -- javascript = { { "prettierd", "prettier" } },
-                -- typescript = { { "prettierd", "prettier" } },
+                javascript = { { "prettierd", "prettier" } },
+                typescript = { { "prettierd", "prettier" } },
                 javascriptreact = { { "prettierd", "prettier" } },
                 typescriptreact = { { "prettierd", "prettier" } },
-                json = { { "prettierd", "prettier" } },
+                json = { "jq" },
                 graphql = { { "prettierd", "prettier" } },
                 java = { "google-java-format" },
                 kotlin = { "ktlint" },
@@ -31,7 +31,7 @@ return {
             },
         })
 
-        vim.keymap.set({ "n", "v" }, "<leader>f", function()
+        vim.keymap.set({ "n", "v" }, "<leader>ff", function()
             conform.format({
                 lsp_fallback = true,
                 async = false,

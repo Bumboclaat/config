@@ -68,8 +68,24 @@ return {
 
     -- Enable the following language servers
     -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-    local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls', 'tflint',
-      'terraformls', 'jdtls', 'html', 'zls', 'htmx', 'golangci_lint_ls', 'templ' }
+    local servers = {
+      'clangd',
+      'rust_analyzer',
+      'pyright',
+      'tsserver',
+      'lua_ls',
+      'gopls', 'tflint',
+      'terraformls',
+      'jdtls',
+      'html',
+      'zls',
+      'htmx',
+      'golangci_lint_ls',
+      'templ',
+      'bashls',
+      'yamlls',
+      'helm_ls'
+    }
 
     -- Ensure the servers above are installed
     require('mason-lspconfig').setup {
@@ -185,6 +201,40 @@ return {
 
     lsp_config.templ.setup {}
 
+
     lsp_config.htmx.setup {}
+
+    lsp_config.bashls.setup {
+      {
+        bashIde = {
+          globPattern = "*@(.sh|.inc|.bash|.command)"
+        }
+      }
+    }
+
+    require('lspconfig').yamlls.setup {
+      settings = {
+        yaml = {
+          schemas = {
+            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+            ["../path/relative/to/file.yml"] = "/.github/workflows/*",
+            ["/path/from/root/of/project"] = "/.github/workflows/*",
+          },
+        },
+      }
+    }
+
+    local mason_registry = require("mason-registry")
+    local yaml_ls_path = mason_registry.get_package("yaml-language-server"):get_install_path()
+
+    lsp_config.helm_ls.setup {
+      settings = {
+        ['helm-ls'] = {
+          yamlls = {
+            path = yaml_ls_path,
+          }
+        }
+      }
+    }
   end
 }
