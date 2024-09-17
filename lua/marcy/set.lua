@@ -73,8 +73,7 @@ vim.cmd [[colorscheme kanagawa]]
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 -- vim.opt.foldtext = "nvim_treesitter#foldtext()"
 
-
 -- vim.opt.list = true
 -- vim.opt.listchars = {
---   eol = "⏎"
+--     eol = "⏎"
 -- }

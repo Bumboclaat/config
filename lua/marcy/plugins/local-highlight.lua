@@ -1,6 +1,8 @@
 return {
+    -- TODO maybe remove this plugin -> crazy rendering delays
     'tzachar/local-highlight.nvim',
     event = 'VeryLazy',
+    enabled = false,
     config = function()
         require('local-highlight').setup()
         vim.api.nvim_create_autocmd('BufRead', {

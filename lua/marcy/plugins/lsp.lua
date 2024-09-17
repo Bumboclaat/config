@@ -72,7 +72,7 @@ return {
       'clangd',
       'rust_analyzer',
       'pyright',
-      'tsserver',
+      'ts_ls',
       'lua_ls',
       'gopls', 'tflint',
       'terraformls',
@@ -115,7 +115,7 @@ return {
       includeInlayEnumMemberValueHints = true,
     }
 
-    lsp_config.tsserver.setup({
+    lsp_config.ts_ls.setup({
       server = {
         on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = false

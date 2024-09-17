@@ -28,6 +28,7 @@ return {
         "python",
         "rust",
         "typescript",
+        "javascript",
         "terraform",
         "markdown",
         "dockerfile",
