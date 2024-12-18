@@ -35,9 +35,9 @@ return {
         enabled = false
       },
       -- comment in to disbale notifications
-      -- notify = {
-      --   enabled = false
-      -- }
+      notify = {
+        enabled = false
+      }
     })
   end
 

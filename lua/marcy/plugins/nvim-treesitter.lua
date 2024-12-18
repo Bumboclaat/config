@@ -42,6 +42,7 @@ return {
         "helm",
         "templ",
         "json",
+        "prisma"
       },
 
       highlight = { enable = true, disable = disable_big_files },
