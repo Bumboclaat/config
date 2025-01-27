@@ -39,7 +39,7 @@ return {
                         { "^ssh://git@(.*)$",                   "https://%1" },
                         { "^ssh://([^:/]+)(:%d+)/(.*)$",        "https://%1/%3" },
                         { "^ssh://([^/]+)/(.*)$",               "https://%1/%2" },
-                        { "ssh%.dev%.azure%.com/v3/(.*)/(.*)/(.*)$", "dev.azure.com/%1/%2/_git/%3" },
+                        { "ssh%.dev%.azure%.com/(.*)/(.*)/(.*)$", "dev.azure.com/%1/%2/_git/%3" },
                         { "^https://%w*@(.*)",                  "https://%1" },
                         { "^git@(.*)",                          "https://%1" },
                         { ":%d+",                               "" },

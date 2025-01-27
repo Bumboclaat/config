@@ -5,7 +5,6 @@ return {
     -- Automatically install LSPs to stdpath for neovim
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    'saghen/blink.cmp'
   },
 
   config = function()
@@ -165,7 +164,7 @@ return {
     lsp_config.svelte.setup({})
 
     -- setup terraform lsp
-    lsp_config.terraformls.setup {}
+    lsp_config.terraformls.setup({})
     vim.api.nvim_create_autocmd({ "BufWritePre" }, {
       pattern = { "*.tf", "*.tfvars" },
       callback = function()
