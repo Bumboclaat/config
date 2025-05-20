@@ -81,7 +81,7 @@ vim.keymap.set('n', '<leader>ws', require('telescope.builtin').lsp_dynamic_works
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat' })
 
 -- See `:help K` for why this keymap
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
+-- vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover Documentation' })
 -- vim.keymap.set('n',('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
 -- Lesser used LSP functionality
@@ -105,7 +105,7 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-h>', vim.cmd.tabn)
 vim.keymap.set('n', '<C-l>', vim.cmd.tabp)
 -- vim.keymap.set('n', '<C-s>', vim.cmd.w)
-vim.keymap.set({ 'n', 'i' }, '<C-s>', '<ESC>:w<CR>')
+vim.keymap.set({ 'n' }, '<C-s>', '<ESC>:w<CR>')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', 'gb', '<C-o>')
@@ -175,16 +175,20 @@ vim.keymap.set('n', "<C-\\>", "<cmd>TmuxNavigatePrevious<cr>")
 
 -- trouble
 vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = 'Diagnostics (Trouble)' })
-vim.keymap.set("n", "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = 'Buffer Diagnostics (Trouble)' })
+vim.keymap.set("n", "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+	{ desc = 'Buffer Diagnostics (Trouble)' })
 vim.keymap.set("n", "<leader>cS", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = 'Symbols (Trouble)' })
-vim.keymap.set("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", { desc = 'LSP Definitions / references / ... (Trouble)' })
+vim.keymap.set("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+	{ desc = 'LSP Definitions / references / ... (Trouble)' })
 vim.keymap.set("n", "<leader>xL", "<cmd>Trouble loclist toggle<cr>", { desc = 'Location List (Trouble)' })
 vim.keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { desc = 'Quickfix List (Trouble)' })
 
 -- spectre
-vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {desc = "Toggle Spectre" })
-vim.keymap.set('n', '<leader>scw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', { desc = "Search current word" })
+vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', { desc = "Toggle Spectre" })
+vim.keymap.set('n', '<leader>scw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+	{ desc = "Search current word" })
 vim.keymap.set('v', '<leader>scw', '<esc><cmd>lua require("spectre").open_visual()<CR>', { desc = "Search current word" })
-vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', { desc = "Search on current file" })
+vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
+	{ desc = "Search on current file" })
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
