@@ -4,13 +4,14 @@ return {
         event = 'LspAttach',
         config = function()
             require('lsp_lines').setup()
-            vim.diagnostic.config({ virtual_lines = false })
-            vim.diagnostic.config({ severity_sort = true, virtual_text = true })
+            vim.diagnostic.config({ virtual_lines = true })
+            vim.diagnostic.config({ severity_sort = true, virtual_text = false })
         end,
     },
     {
         'lvimuser/lsp-inlayhints.nvim',
         event = 'LspAttach',
+        enabled = false,
         config = function()
             local lspInlayhints = require('lsp-inlayhints')
             lspInlayhints.setup()
