@@ -32,18 +32,18 @@ return {
                     line_end = nil, ---@type number?
                     -- patterns to transform remotes to an actual URL
                     remote_patterns = {
-                        { "^(https?://.*)%.git$",               "%1" },
-                        { "^git@(.+):(.+)%.git$",               "https://%1/%2" },
-                        { "^git@(.+):(.+)$",                    "https://%1/%2" },
-                        { "^git@(.+)/(.+)$",                    "https://%1/%2" },
-                        { "^ssh://git@(.*)$",                   "https://%1" },
-                        { "^ssh://([^:/]+)(:%d+)/(.*)$",        "https://%1/%3" },
-                        { "^ssh://([^/]+)/(.*)$",               "https://%1/%2" },
+                        { "^(https?://.*)%.git$",                 "%1" },
+                        { "^git@(.+):(.+)%.git$",                 "https://%1/%2" },
+                        { "^git@(.+):(.+)$",                      "https://%1/%2" },
+                        { "^git@(.+)/(.+)$",                      "https://%1/%2" },
+                        { "^ssh://git@(.*)$",                     "https://%1" },
+                        { "^ssh://([^:/]+)(:%d+)/(.*)$",          "https://%1/%3" },
+                        { "^ssh://([^/]+)/(.*)$",                 "https://%1/%2" },
                         { "ssh%.dev%.azure%.com/(.*)/(.*)/(.*)$", "dev.azure.com/%1/%2/_git/%3" },
-                        { "^https://%w*@(.*)",                  "https://%1" },
-                        { "^git@(.*)",                          "https://%1" },
-                        { ":%d+",                               "" },
-                        { "%.git$",                             "" },
+                        { "^https://%w*@(.*)",                    "https://%1" },
+                        { "^git@(.*)",                            "https://%1" },
+                        { ":%d+",                                 "" },
+                        { "%.git$",                               "" },
                     },
                     url_patterns = {
                         ["github%.com"] = {
@@ -62,7 +62,7 @@ return {
                             commit = "/commits/{commit}",
                         },
                     },
-                }
+                },
             },
             statuscolumn = { enabled = true },
             words = { enabled = true },
@@ -71,20 +71,114 @@ return {
                     wo = { wrap = true }, -- Wrap notifications
                 },
             },
+            input = {
+                enabled = false,
+                -- your input configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            },
         },
         keys = {
-            { "<leader>.",  function() Snacks.scratch() end,                 desc = "Toggle Scratch Buffer" },
-            { "<leader>S",  function() Snacks.scratch.select() end,          desc = "Select Scratch Buffer" },
-            { "<leader>n",  function() Snacks.notifier.show_history() end,   desc = "Notification History" },
-            { "<leader>bd", function() Snacks.bufdelete() end,               desc = "Delete Buffer" },
-            { "<leader>cR", function() Snacks.rename.rename_file() end,      desc = "Rename File" },
-            { "<leader>gB", function() Snacks.gitbrowse() end,               desc = "Git Browse" },
-            { "<leader>gf", function() Snacks.lazygit.log_file() end,        desc = "Lazygit Current File History" },
-            { "<leader>gg", function() Snacks.lazygit() end,                 desc = "Lazygit" },
-            { "<leader>gl", function() Snacks.lazygit.log() end,             desc = "Lazygit Log (cwd)" },
-            { "<leader>un", function() Snacks.notifier.hide() end,           desc = "Dismiss All Notifications" },
-            { "]]",         function() Snacks.words.jump(vim.v.count1) end,  desc = "Next Reference",              mode = { "n", "t" } },
-            { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference",              mode = { "n", "t" } },
+            {
+                "<leader>.",
+                function()
+                    Snacks.scratch()
+                end,
+                desc = "Toggle Scratch Buffer",
+            },
+            {
+                "<leader>S",
+                function()
+                    Snacks.scratch.select()
+                end,
+                desc = "Select Scratch Buffer",
+            },
+            {
+                "<leader>n",
+                function()
+                    Snacks.notifier.show_history()
+                end,
+                desc = "Notification History",
+            },
+            {
+                "<leader>bd",
+                function()
+                    Snacks.bufdelete()
+                end,
+                desc = "Delete Buffer",
+            },
+            {
+                "<leader>ba",
+                function()
+                    Snacks.bufdelete.all()
+                end,
+                desc = "Delete Buffer",
+            },
+            {
+                "<leader>bo",
+                function()
+                    Snacks.bufdelete.other()
+                end,
+                desc = "Delete Buffer",
+            },
+            {
+                "<leader>cR",
+                function()
+                    Snacks.rename.rename_file()
+                end,
+                desc = "Rename File",
+            },
+            {
+                "<leader>gB",
+                function()
+                    Snacks.gitbrowse()
+                end,
+                desc = "Git Browse",
+            },
+            {
+                "<leader>gf",
+                function()
+                    Snacks.lazygit.log_file()
+                end,
+                desc = "Lazygit Current File History",
+            },
+            {
+                "<leader>gg",
+                function()
+                    Snacks.lazygit()
+                end,
+                desc = "Lazygit",
+            },
+            {
+                "<leader>gl",
+                function()
+                    Snacks.lazygit.log()
+                end,
+                desc = "Lazygit Log (cwd)",
+            },
+            {
+                "<leader>un",
+                function()
+                    Snacks.notifier.hide()
+                end,
+                desc = "Dismiss All Notifications",
+            },
+            {
+                "]]",
+                function()
+                    Snacks.words.jump(vim.v.count1)
+                end,
+                desc = "Next Reference",
+                mode = { "n", "t" },
+            },
+            {
+                "[[",
+                function()
+                    Snacks.words.jump(-vim.v.count1)
+                end,
+                desc = "Prev Reference",
+                mode = { "n", "t" },
+            },
             {
                 "<leader>N",
                 desc = "Neovim News",
@@ -102,7 +196,7 @@ return {
                         },
                     })
                 end,
-            }
+            },
         },
         init = function()
             vim.api.nvim_create_autocmd("User", {
