@@ -7,6 +7,7 @@ return {
     'nvim-telescope/telescope-file-browser.nvim',
     'AckslD/nvim-neoclip.lua',
     'aaronhallaert/advanced-git-search.nvim',
+    'nvim-telescope/telescope-ui-select.nvim',
     {
       -- Native sorter for vastly improved performance
       'nvim-telescope/telescope-fzf-native.nvim',
@@ -94,6 +95,11 @@ return {
           git_diff_flags = {},
           show_builtin_git_pickers = false,
         },
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown {
+            -- even more opts
+          }
+        }
       },
 
       -- Enable telescope fzf native, if installed
@@ -103,5 +109,6 @@ return {
     require('telescope').load_extension('live_grep_args')
     require('telescope').load_extension('neoclip')
     require('telescope').load_extension('file_browser')
+    require("telescope").load_extension("ui-select")
   end
 }
