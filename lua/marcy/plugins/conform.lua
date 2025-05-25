@@ -21,7 +21,7 @@ return {
                 bash = { "beautysh", stop_after_first = true },
                 proto = { "buf", stop_after_first = true },
                 rust = { "rust-analyzer", stop_after_first = true },
-                yaml = { "yamlfix", stop_after_first = true },
+                yaml = { "prettierd", stop_after_first = true },
                 toml = { "taplo", stop_after_first = true },
                 css = { "prettierd", "prettier", stop_after_first = true },
                 scss = { "prettierd", "prettier", stop_after_first = true },
