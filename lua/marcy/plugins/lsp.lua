@@ -57,21 +57,22 @@ return {
     require("mason").setup()
 
     local servers = {
+      "bashls",
       "clangd",
-      "rust_analyzer",
-      "pyright",
-      "ts_ls",
-      "lua_ls",
+      "eslint",
+      "golangci_lint_ls",
       "gopls",
+      "html",
+      "jdtls",
+      "lua_ls",
+      "pyright",
+      "rust_analyzer",
+      "templ",
       "terraformls",
       "tflint",
-      "jdtls",
-      "html",
-      "zls",
-      "golangci_lint_ls",
-      "templ",
-      "bashls",
-      "eslint"
+      "ts_ls",
+      "yamlls",
+      "zls"
     }
 
     require("mason-lspconfig").setup({
