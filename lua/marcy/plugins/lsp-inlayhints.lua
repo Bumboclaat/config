@@ -4,8 +4,7 @@ return {
         event = 'LspAttach',
         config = function()
             require('lsp_lines').setup()
-            vim.diagnostic.config({ virtual_lines = true })
-            vim.diagnostic.config({ severity_sort = true, virtual_text = false })
+            vim.diagnostic.config({ severity_sort = true, virtual_text = true, virtual_lines = false })
         end,
     },
     {

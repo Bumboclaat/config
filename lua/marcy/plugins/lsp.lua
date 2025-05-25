@@ -2,9 +2,6 @@ return {
 
   "neovim/nvim-lspconfig",
   dependencies = {
-    -- Automatically install LSPs to stdpath for neovim
-    -- { "williamboman/mason.nvim",           tag = "v1.11.0", },
-    -- { "williamboman/mason-lspconfig.nvim", tag = "v1.31.0" },
     { "williamboman/mason.nvim" },
     { "williamboman/mason-lspconfig.nvim" },
     { "saghen/blink.cmp" },
@@ -13,15 +10,7 @@ return {
   config = function()
     local lsp_config = require("lspconfig")
 
-    -- LSP settings.
-    --  This function gets run when an LSP connects to a particular buffer.
     local on_attach = function(_, bufnr)
-      -- NOTE: Remember that lua is a real programming language, and as such it is possible
-      -- to define small helper and utility functions so you don't have to repeat yourself
-      -- many times.
-      --
-      -- In this case, we create a function that lets us more easily define mappings specific
-      -- for LSP related items. It sets the mode, buffer and description for us each time.
       local nmap = function(keys, func, desc)
         if desc then
           desc = "LSP: " .. desc
@@ -65,11 +54,8 @@ return {
       end, { desc = "Format current buffer with LSP" })
     end
 
-    -- Setup mason so it can manage external tooling
     require("mason").setup()
 
-    -- Enable the following language servers
-    -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
     local servers = {
       "clangd",
       "rust_analyzer",
@@ -77,34 +63,27 @@ return {
       "ts_ls",
       "lua_ls",
       "gopls",
-      "tflint",
       "terraformls",
       "tflint",
       "jdtls",
       "html",
       "zls",
-      "htmx",
       "golangci_lint_ls",
       "templ",
       "bashls",
-      "yamlls",
-      "helm_ls",
     }
 
-    -- Ensure the servers above are installed
     require("mason-lspconfig").setup({
       ensure_installed = servers,
+      automatic_enable = false,
     })
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+    capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
-    -- **Configure Each LSP Server with `on_attach` and `capabilities`**
     for _, server in ipairs(servers) do
-      -- Optional: Define server-specific settings if needed
       local server_config = {}
 
-      -- Example: Lua-specific settings
       if server == "lua_ls" then
         server_config.settings = {
           Lua = {
@@ -122,26 +101,21 @@ return {
             },
           },
         }
+      elseif server == "bashls" then
+        server_config.settings = {
+          bashIde = {
+            globPattern = "*@(.sh|.inc|.bash|.command)",
+          },
+        }
       end
 
-      -- Setup the server with `on_attach` and `capabilities`
       lsp_config[server].setup(vim.tbl_extend("force", {
         on_attach = on_attach,
         capabilities = capabilities,
       }, server_config))
     end
-    -- nvim-cmp supports additional completion capabilities
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-    -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-    --
-    -- for _, lsp in ipairs(servers) do
-    --   lsp_config[lsp].setup({
-    --     on_attach = on_attach,
-    --     capabilities = capabilities,
-    --   })
-    -- end
 
-    -- anable TS inlay hints
+    -- setup ts_ls 
     local ts_inlay_hint_options = {
       enabled = true,
       includeInlayParameterNameHints = "all",
@@ -152,6 +126,7 @@ return {
       includeInlayFunctionLikeReturnTypeHints = true,
       includeInlayEnumMemberValueHints = true,
     }
+
     vim.lsp.config("ts_ls", {
       server = {
         on_attach = function(client, bufnr)
@@ -166,21 +141,6 @@ return {
       },
     })
 
-    -- lsp_config.ts_ls.setup({
-    --   server = {
-    --     on_attach = function(client, bufnr)
-    --       client.server_capabilities.documentFormattingProvider = false
-    --       require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-    --     end,
-    --   },
-    --   root_dir = lsp_config.util.root_pattern("package.json"),
-    --   settings = {
-    --     typescript = { inlayHints = ts_inlay_hint_options },
-    --     javascript = { inlayHints = ts_inlay_hint_options },
-    --   },
-    -- })
-
-    -- disable semantic tokens
     lsp_config.util.default_config = vim.tbl_extend("force", lsp_config.util.default_config, {
       on_attach = function(client)
         client.server_capabilities.semanticTokensProvider = nil
@@ -192,12 +152,6 @@ return {
       settings = {
         packageManager = "npm",
       },
-      -- on_attach = function(_, bufnr)
-      --   vim.api.nvim_create_autocmd("BufWritePre", {
-      --     buffer = bufnr,
-      --     command = "LspEslintFixAll",
-      --   })
-      -- end,
       filetypes = {
         "javascript",
         "javascriptreact",
@@ -227,8 +181,6 @@ return {
       end,
     })
 
-    vim.lsp.config("tflint", {})
-
     vim.lsp.config("zls", {})
 
     vim.lsp.config("jdtls", {
@@ -238,35 +190,11 @@ return {
       },
     })
 
-    vim.lsp.config("gopls", {})
-
     vim.lsp.config("templ", {})
-
-    vim.lsp.config("htmx", {})
 
     vim.lsp.config("bashls", {
       bashIde = {
         globPattern = "*@(.sh|.inc|.bash|.command)",
-      },
-    })
-
-    vim.lsp.config("yamlls", {
-      yaml = {
-        schemas = {
-          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-          ["../path/relative/to/file.yml"] = "/.github/workflows/*",
-          ["/path/from/root/of/project"] = "/.github/workflows/*",
-        },
-      },
-    })
-
-    vim.lsp.config("helmls", {
-      settings = {
-        ["helm-ls"] = {
-          yamlls = {
-            path = yaml_ls_path,
-          },
-        },
       },
     })
   end,
