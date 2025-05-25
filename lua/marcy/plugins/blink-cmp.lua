@@ -26,6 +26,9 @@ return {
 			-- C-k: Toggle signature help (if signature.enabled = true)
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
+			signature = {
+				enabled = true,
+			},
 			keymap = {
 				preset = "default",
 				["<CR>"] = { "select_and_accept", "fallback" },

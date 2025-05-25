@@ -71,6 +71,7 @@ return {
       "golangci_lint_ls",
       "templ",
       "bashls",
+      "eslint"
     }
 
     require("mason-lspconfig").setup({
@@ -107,6 +108,26 @@ return {
             globPattern = "*@(.sh|.inc|.bash|.command)",
           },
         }
+      elseif server == "eslint" then
+        server_config.settings = {
+          settings = {
+            packageManager = "npm",
+          },
+          filetypes = {
+            "javascript",
+            "javascriptreact",
+            "javascript.jsx",
+            "typescript",
+            "typescriptreact",
+            "typescript.tsx",
+            "svelte",
+            "html",
+          },
+        }
+        vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+          pattern = { "*.ts", "*.js", "*.tsx", "*.jsx" },
+          command = "EslintFixAll",
+        })
       end
 
       lsp_config[server].setup(vim.tbl_extend("force", {
@@ -115,7 +136,7 @@ return {
       }, server_config))
     end
 
-    -- setup ts_ls 
+    -- setup ts_ls
     local ts_inlay_hint_options = {
       enabled = true,
       includeInlayParameterNameHints = "all",
@@ -145,27 +166,6 @@ return {
       on_attach = function(client)
         client.server_capabilities.semanticTokensProvider = nil
       end,
-    })
-
-    -- setup eslint server
-    vim.lsp.config("eslint", {
-      settings = {
-        packageManager = "npm",
-      },
-      filetypes = {
-        "javascript",
-        "javascriptreact",
-        "javascript.jsx",
-        "typescript",
-        "typescriptreact",
-        "typescript.tsx",
-        "svelte",
-        "html",
-      },
-    })
-    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      pattern = { "*.ts", "*.js", "*.tsx", "*.jsx" },
-      command = "LspEslintFixAll",
     })
 
     vim.lsp.config("dartls", {})
