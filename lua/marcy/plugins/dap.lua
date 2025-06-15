@@ -47,10 +47,13 @@ local plugin = {
     local dap = require("dap")
     -- Mason integration
     require("mason-nvim-dap").setup({
-      ensure_installed = { "js-debug-adapter" },
+      ensure_installed = {
+        "js-debug-adapter",
+        "dlv",
+      },
     })
 
-    require("dap").adapters["pwa-node"] = {
+    dap.adapters["pwa-node"] = {
       type = "server",
       host = "127.0.0.1",
       port = "${port}",
@@ -60,7 +63,7 @@ local plugin = {
       },
     }
 
-    require("dap").configurations.typescript = {
+    dap.configurations.typescript = {
       {
         type = "pwa-node",
         request = "launch",
@@ -130,41 +133,11 @@ local plugin = {
       },
     }
 
-    dap.adapters.go = function(callback, config)
-      local handle
-      local pid_or_err
-      local port = 3000
-      handle, pid_or_err = vim.loop.spawn("dlv", {
-        args = { "dap", "-l", "127.0.0.1:" .. port },
-        detached = true,
-      }, function(code)
-        handle:close()
-        print("Delve exited with code", code)
-      end)
-      vim.defer_fn(function()
-        callback({ type = "server", host = "127.0.0.1", port = port })
-      end, 100) -- Wait 100ms for delve to start
-    end
-
-    dap.configurations.go = {
-      {
-        type = "go",
-        name = "Debug",
-        request = "launch",
-        program = "${file}",
-      },
-      {
-        type = "go",
-        name = "Debug test", -- Configuration for debugging test files
-        request = "launch",
-        mode = "test",
-        program = "./${relativeFileDirname}",
-      },
-    }
+    require("dap-go").setup()
 
     -- UI
     local dapui = require("dapui")
-    dapui.setup({})
+    dapui.setup()
     require("dap-go").setup()
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dapui.open({})
