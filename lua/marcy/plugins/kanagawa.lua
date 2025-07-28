@@ -3,6 +3,8 @@ function LineNumberColors()
     -- vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#ADD8E6', bold = true })
     vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = '#627d9a', bold = true })
     vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#627d9a', bold = true })
+    vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#FF9D3C', bold = true })
+    vim.api.nvim_set_hl(0, 'MatchParen', { fg = '#FF9D3C', bold = true })
     vim.api.nvim_set_hl(0, 'Visual', { bg = '#627d9a', bold = true })
     vim.api.nvim_set_hl(0, 'Todo', { bg = '#edde32', bold = true })
     vim.api.nvim_set_hl(0, 'TelescopeSelection', { bg = '#627d9a', bold = true })
@@ -30,7 +32,7 @@ return {
                     MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
 
                     --popup menu
-                    Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },         -- add `blend = vim.o.pumblend` to enable transparency
+                    Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 }, -- add `blend = vim.o.pumblend` to enable transparency
                     PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
                     PmenuSbar = { bg = theme.ui.bg_m1 },
                     PmenuThumb = { bg = theme.ui.bg_p2 },
