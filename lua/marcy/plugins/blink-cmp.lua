@@ -28,6 +28,9 @@ return {
 			-- See :h blink-cmp-config-keymap for defining your own keymap
 			signature = {
 				enabled = true,
+				window = {
+					border = "single",
+				},
 			},
 			keymap = {
 				preset = "default",
@@ -43,11 +46,17 @@ return {
 			-- (Default) Only show the documentation popup when manually triggered
 			completion = {
 				documentation = {
-					auto_show = true
+					auto_show = true,
+					window = {
+						border = "single",
+					},
 				},
 				ghost_text = {
 					show_with_menu = false,
-				}
+				},
+				menu = {
+					border = "single",
+				},
 			},
 
 			-- Default list of enabled providers defined so that you can extend it
@@ -55,7 +64,7 @@ return {
 			cmdline = {
 				keymap = {
 					-- recommended, as the default keymap will only show and select the next item
-					['<Tab>'] = { 'show', 'accept' },
+					["<Tab>"] = { "show", "accept" },
 				},
 				completion = { menu = { auto_show = true } },
 			},
