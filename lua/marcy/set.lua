@@ -8,7 +8,11 @@ vim.opt.updatetime = 1000
 
 vim.opt.signcolumn = "yes"
 
-vim.opt.backup = false
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.winborder = "rounded"
+
 vim.opt.writebackup = false
 vim.opt.swapfile = false
 
