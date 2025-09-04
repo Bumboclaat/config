@@ -3,6 +3,12 @@ return {
     config = function()
         vim.g.projectionist_heuristics = {
             ["*"] = {
+                ["*.go"] = {
+                    alternate = "{}_test.go",
+                },
+                ["*_test.go"] = {
+                    alternate = "{}.go",
+                },
                 ["src/*.ts"] = {
                     alternate = "src/{}.spec.ts",
                 },
