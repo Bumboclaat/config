@@ -133,6 +133,17 @@ local plugin = {
       },
     }
 
+    dap.configurations.go = {
+      {
+        name = "Attach to Air",
+        type = "go",
+        request = "attach",
+        mode = "remote",
+        port = 2345,
+        host = "127.0.0.1"
+      }
+    }
+
     require("dap-go").setup()
 
     -- UI
