@@ -11,6 +11,7 @@ return {
                 svelte = { "prettierd", "prettier", stop_after_first = true },
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 typescript = { "prettierd", "prettier", stop_after_first = true },
+                vue = { "prettierd", "prettier", stop_after_first = true },
                 javascriptreact = { "prettierd", "prettier", stop_after_first = true },
                 typescriptreact = { "prettierd", "prettier", stop_after_first = true },
                 json = { "jq", stop_after_first = true },
@@ -21,11 +22,25 @@ return {
                 bash = { "beautysh", stop_after_first = true },
                 proto = { "buf", stop_after_first = true },
                 rust = { "rust-analyzer", stop_after_first = true },
-                yaml = { "prettierd", stop_after_first = true },
+                yaml = { "prettierd", "prettier", stop_after_first = true },
                 toml = { "taplo", stop_after_first = true },
-                css = { "prettierd", "prettier", stop_after_first = true },
-                scss = { "prettierd", "prettier", stop_after_first = true },
+                css = { "stylelint", stop_after_first = true },
+                scss = { "stylelint", stop_after_first = true },
                 terraform = { "terraform_fmt" },
+                go = { "golines" },
+            },
+            formatters = {
+                stylelint = {
+                    args = { "--fix", "--stdin", "--stdin-filename", "$FILENAME" },
+                },
+                ["vue-tsc"] = {
+                    command = "vue-tsc",
+                    args = { "--noEmit", "--pretty", "$FILENAME" },
+                    stdin = false,
+                },
+                golines = {
+                    args = { "--max-len=140", "--base-formatter=gofumpt" },
+                },
             },
         })
 
