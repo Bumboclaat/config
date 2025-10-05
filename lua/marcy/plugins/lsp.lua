@@ -66,6 +66,7 @@ return {
       "lua_ls",
       "pyright",
       "rust_analyzer",
+      "tailwindcss",
       "templ",
       "terraformls",
       "tflint",
@@ -83,6 +84,10 @@ return {
     capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
     for _, server in ipairs(servers) do
+      if server == "ts_ls" then
+        goto continue
+      end
+
       local server_config = {}
 
       if server == "lua_ls" then
@@ -109,34 +114,63 @@ return {
           },
         }
       elseif server == "eslint" then
+        server_config.root_dir = lsp_config.util.root_pattern(
+          ".eslintrc",
+          ".eslintrc.js",
+          ".eslintrc.cjs",
+          ".eslintrc.yaml",
+          ".eslintrc.yml",
+          ".eslintrc.json",
+          "eslint.config.js",
+          "eslint.config.mjs",
+          "eslint.config.cjs",
+          "package.json"
+        )
         server_config.settings = {
-          settings = {
-            packageManager = "npm",
-          },
-          filetypes = {
-            "javascript",
-            "javascriptreact",
-            "javascript.jsx",
-            "typescript",
-            "typescriptreact",
-            "typescript.tsx",
-            "svelte",
-            "html",
-          },
+          packageManager = "npm",
         }
+        server_config.filetypes = {
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "vue",
+        }
+        -- Only create autocmd if ESLint is available
         vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-          pattern = { "*.ts", "*.js", "*.tsx", "*.jsx" },
-          command = "EslintFixAll",
+          pattern = { "*.ts", "*.js", "*.tsx", "*.jsx", "*.vue" },
+          callback = function()
+            local clients = vim.lsp.get_clients({ name = "eslint" })
+            if #clients > 0 then
+              vim.cmd("EslintFixAll")
+            end
+          end,
         })
+      elseif server == "gopls" then
+        server_config.settings = {
+          gopls = {
+            buildFlags = { "-tags=unit,test,db" },
+            gofumpt = true,
+            ["local"] = "wildfireservice",
+            -- staticcheck = true,
+          }
+        }
+      elseif server == "vue_ls" then
+        server_config.init_options = {
+          typescript = {
+            tsdk = vim.fn.stdpath('data') .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+          }
+        }
       end
 
       lsp_config[server].setup(vim.tbl_extend("force", {
         on_attach = on_attach,
         capabilities = capabilities,
       }, server_config))
+      ::continue::
     end
 
-    -- setup ts_ls
+    -- TypeScript inlay hints configuration
     local ts_inlay_hint_options = {
       enabled = true,
       includeInlayParameterNameHints = "all",
@@ -148,18 +182,35 @@ return {
       includeInlayEnumMemberValueHints = true,
     }
 
-    vim.lsp.config("ts_ls", {
-      server = {
-        on_attach = function(client, bufnr)
-          client.server_capabilities.documentFormattingProvider = false
-          require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-        end,
-      },
-      root_dir = lsp_config.util.root_pattern("package.json"),
+    -- Configure TypeScript server with proper settings
+    lsp_config.ts_ls.setup({
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        if client.name == "ts_ls" then
+          -- Add workspace diagnostics if available
+          local ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
+          if ok then
+            workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
+          end
+        end
+      end,
+      capabilities = capabilities,
+      root_dir = lsp_config.util.root_pattern("package.json", "tsconfig.json", ".git"),
       settings = {
         typescript = { inlayHints = ts_inlay_hint_options },
         javascript = { inlayHints = ts_inlay_hint_options },
       },
+      init_options = {
+        plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+            languages = { "vue" }
+          }
+        }
+      },
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" }
     })
 
     lsp_config.util.default_config = vim.tbl_extend("force", lsp_config.util.default_config, {
@@ -167,8 +218,6 @@ return {
         client.server_capabilities.semanticTokensProvider = nil
       end,
     })
-
-    vim.lsp.config("gopls", {})
 
     -- TODO check if this really works
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -195,8 +244,6 @@ return {
     })
 
     vim.lsp.config("dartls", {})
-    -- setup svelte server
-    vim.lsp.config("svelte", {})
 
     -- setup terraform lsp
     vim.lsp.config("terraformls", {})

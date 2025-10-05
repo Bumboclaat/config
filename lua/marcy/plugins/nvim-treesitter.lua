@@ -44,7 +44,8 @@ return {
         "json",
         "prisma",
         "zig",
-        "hurl"
+        "hurl",
+        "vue"
       },
 
       highlight = { enable = true, disable = disable_big_files },
