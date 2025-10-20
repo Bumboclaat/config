@@ -5,7 +5,7 @@ return {
   dependencies = {
     "nvim-telescope/telescope-live-grep-args.nvim",
     'nvim-telescope/telescope-file-browser.nvim',
-    'AckslD/nvim-neoclip.lua',
+    -- 'AckslD/nvim-neoclip.lua',
     'aaronhallaert/advanced-git-search.nvim',
     'nvim-telescope/telescope-ui-select.nvim',
     {
@@ -39,6 +39,7 @@ return {
         layout_strategy = 'vertical',
         layout_config = { vertical = { width = 0.9 } },
       },
+      path_displays = 'smart',
       pickers = {
         find_files = {
           hidden = true,
@@ -107,7 +108,7 @@ return {
     })
 
     require('telescope').load_extension('live_grep_args')
-    require('telescope').load_extension('neoclip')
+    -- require('telescope').load_extension('neoclip')
     require('telescope').load_extension('file_browser')
     require("telescope").load_extension("ui-select")
     require "marcy.telescope.multigrep".setup()

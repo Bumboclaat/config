@@ -1,4 +1,5 @@
 return {
+        enabled = false,
         "neanias/everforest-nvim",
         version = false,
         lazy = false,
