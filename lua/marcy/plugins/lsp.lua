@@ -194,6 +194,12 @@ return {
         server_config.init_options = {
           command = { "golangci-lint", "run", "--output.json.path=stdout", "--show-stats=false" }
         }
+      elseif server == "pyright" then
+        server_config.init_options = {
+          typescript = {
+            tsdk = vim.fn.stdpath('data') .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+          }
+        }
       elseif server == "vue_ls" then
         server_config.init_options = {
           typescript = {
@@ -324,6 +330,21 @@ return {
     vim.lsp.config("bashls", {
       bashIde = {
         globPattern = "*@(.sh|.inc|.bash|.command)",
+      },
+    })
+
+    vim.lsp.config("pywright", {
+      settings = {
+        pyright = {
+          -- Using Ruff's import organizer
+          disableOrganizeImports = true,
+        },
+        python = {
+          analysis = {
+            -- Ignore all files for analysis to exclusively use Ruff for linting
+            ignore = { '*' },
+          },
+        },
       },
     })
   end,

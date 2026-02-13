@@ -21,6 +21,7 @@ return {
                 html = { "prettierd", "prettier", stop_after_first = true },
                 bash = { "beautysh", stop_after_first = true },
                 proto = { "buf", stop_after_first = true },
+                python = { "ruff_format", stop_after_first = true },
                 rust = { "rust-analyzer", stop_after_first = true },
                 yaml = { "prettierd", "prettier", stop_after_first = true },
                 toml = { "taplo", stop_after_first = true },
