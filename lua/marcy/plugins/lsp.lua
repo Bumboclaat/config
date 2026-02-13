@@ -59,13 +59,17 @@ return {
     local servers = {
       "bashls",
       "clangd",
+      "cssls",
       "eslint",
       "gopls",
+      "golangci_lint_ls",
       "html",
       "jdtls",
       "lua_ls",
       "pyright",
       "rust_analyzer",
+      "ruff",
+      "svelte",
       "tailwindcss",
       "templ",
       "terraformls",
@@ -152,8 +156,43 @@ return {
             buildFlags = { "-tags=unit,test,db" },
             gofumpt = true,
             ["local"] = "wildfireservice",
-            -- staticcheck = true,
+            -- Disable gopls staticcheck to avoid conflicts with golangci-lint
+            staticcheck = false,
+            -- Disable analyses that golangci-lint handles
+            analyses = {
+              unusedparams = false,
+              shadow = false,
+              unusedwrite = false,
+              useany = false,
+              fieldalignment = false,
+              nilness = false,
+              unusedvariable = false,
+            },
+            hints = {
+              rangeVariableTypes = true,
+              parameterNames = true,
+              constantValues = true,
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              functionTypeParameters = true,
+            },
           }
+        }
+      elseif server == "golangci_lint_ls" then
+        server_config.cmd = { "golangci-lint-langserver" }
+        server_config.filetypes = { "go", "gomod" }
+        server_config.root_dir = lsp_config.util.root_pattern(
+          ".golangci.yml",
+          ".golangci.yaml",
+          ".golangci.toml",
+          ".golangci.json",
+          "go.work",
+          "go.mod",
+          ".git"
+        )
+        server_config.init_options = {
+          command = { "golangci-lint", "run", "--output.json.path=stdout", "--show-stats=false" }
         }
       elseif server == "vue_ls" then
         server_config.init_options = {
