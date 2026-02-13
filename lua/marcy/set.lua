@@ -74,7 +74,7 @@ vim.cmd([[colorscheme kanagawa]])
 -- vim.cmd [[colorscheme kanagawa-lotus]]
 -- vim.cmd [[colorscheme catppuccin-latte]]
 
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- vim.opt.foldtext = "nvim_treesitter#foldtext()"
 
 local function fold_virt_text(result, s, lnum, coloff)
