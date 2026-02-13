@@ -10,7 +10,7 @@ return {
                     alternate = "{}.go",
                 },
                 ["src/*.ts"] = {
-                    alternate = "src/{}.spec.ts",
+                    alternate = "src/{}.test.ts",
                 },
                 ["src/*.spec.ts"] = {
                     alternate = "src/{}.ts",
