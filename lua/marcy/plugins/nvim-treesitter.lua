@@ -1,119 +1,222 @@
-local disable_big_files = function(lang, buf)
-  -- ignore big files
+local disable_big_files = function(_, buf)
   local max_filesize = 50 * 1024 -- 50 KB
-  local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-  if ok and stats and stats.size > max_filesize then
-    return true
+  local filename = vim.api.nvim_buf_get_name(buf)
+  if filename == "" then
+    return false
   end
-  return false
+
+  local ok, stats = pcall(vim.uv.fs_stat, filename)
+  return ok and stats and stats.size > max_filesize
+end
+
+local is_big_file = function(buf)
+  return disable_big_files(nil, buf or vim.api.nvim_get_current_buf())
+end
+
+local incremental_parent = function()
+  if is_big_file() then
+    return
+  end
+
+  local has_parser = vim.treesitter.get_parser(0, nil, { error = false }) ~= nil
+  if has_parser then
+    local mode = vim.api.nvim_get_mode().mode
+    if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
+      vim.cmd.normal({ "v", bang = true })
+    end
+    require("vim.treesitter._select").select_parent(vim.v.count1)
+  else
+    pcall(vim.lsp.buf.selection_range, vim.v.count1)
+  end
+end
+
+local incremental_child = function()
+  if is_big_file() then
+    return
+  end
+
+  local has_parser = vim.treesitter.get_parser(0, nil, { error = false }) ~= nil
+  if has_parser then
+    local mode = vim.api.nvim_get_mode().mode
+    if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
+      vim.cmd.normal({ "v", bang = true })
+    end
+    require("vim.treesitter._select").select_child(vim.v.count1)
+  else
+    pcall(vim.lsp.buf.selection_range, -vim.v.count1)
+  end
 end
 
 return {
   "nvim-treesitter/nvim-treesitter",
-  build = function()
-    pcall(require("nvim-treesitter.install").update({ with_sync = true }))
-  end,
+  branch = "main",
+  build = ":TSUpdate",
   dependencies = {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
   config = function()
-    require("nvim-treesitter.configs").setup({
-      -- Add languages to be installed here that you want installed for treesitter
-      ensure_installed = {
-        "c",
-        "cpp",
-        "c_sharp",
-        "go",
-        "lua",
-        "python",
-        "rust",
-        "typescript",
-        "javascript",
-        "terraform",
-        "markdown",
-        "dockerfile",
-        "yaml",
-        "dart",
-        "comment",
-        "html",
-        "sql",
-        "helm",
-        "bash",
-        "helm",
-        "templ",
-        "json",
-        "prisma",
-        "zig",
-        "hurl",
-        "vue"
-      },
+    local treesitter = require("nvim-treesitter")
+    local ensure_installed = {
+      "c",
+      "cpp",
+      "c_sharp",
+      "go",
+      "lua",
+      "python",
+      "rust",
+      "typescript",
+      "javascript",
+      "terraform",
+      "markdown",
+      "dockerfile",
+      "yaml",
+      "dart",
+      "comment",
+      "html",
+      "sql",
+      "helm",
+      "bash",
+      "templ",
+      "json",
+      "prisma",
+      "zig",
+      "hurl",
+      "vue",
+    }
 
-      highlight = { enable = true, disable = disable_big_files },
-      indent = { enable = true, disable = disable_big_files },
-      incremental_selection = {
-        enable = true,
-        disable = disable_big_files,
-        keymaps = {
-          init_selection = "<c-space>",
-          node_incremental = "<c-space>",
-          scope_incremental = "<c-s>",
-          node_decremental = "<c-backspace>",
-        },
+    treesitter.setup({})
+
+    local use_builtin_parser = function(lang)
+      for _, path in ipairs(vim.api.nvim_get_runtime_file("parser/" .. lang .. ".so", true)) do
+        if path:find("/lib/nvim/parser/", 1, true) then
+          pcall(vim.treesitter.language.add, lang, { path = path })
+          break
+        end
+      end
+    end
+
+    for _, lang in ipairs({ "c", "lua", "markdown", "markdown_inline", "query", "vim", "vimdoc" }) do
+      use_builtin_parser(lang)
+    end
+
+    local installed_parsers = {}
+    for _, parser in ipairs(treesitter.get_installed("parsers")) do
+      installed_parsers[parser] = true
+    end
+
+    local missing_parsers = {}
+    for _, lang in ipairs(ensure_installed) do
+      if not installed_parsers[lang] then
+        table.insert(missing_parsers, lang)
+      end
+    end
+
+    if #missing_parsers > 0 and vim.fn.executable("tree-sitter") == 1 then
+      treesitter.install(missing_parsers)
+    end
+
+    vim.treesitter.language.register("gotmpl", { "gohtmltmpl", "gotexttmpl", "gotmpl" })
+
+    local ts_group = vim.api.nvim_create_augroup("marcy_treesitter", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+      group = ts_group,
+      callback = function(event)
+        if is_big_file(event.buf) then
+          return
+        end
+
+        pcall(vim.treesitter.start, event.buf)
+        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
+
+    require("nvim-treesitter-textobjects").setup({
+      select = {
+        lookahead = true,
       },
-      textobjects = {
-        select = {
-          enable = true,
-          disable = disable_big_files,
-          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-          keymaps = {
-            -- You can use the capture groups defined in textobjects.scm
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true, -- whether to set jumps in the jumplist
-          goto_next_start = {
-            ["]m"] = "@function.outer",
-            ["]]"] = "@class.outer",
-          },
-          goto_next_end = {
-            ["]M"] = "@function.outer",
-            ["]["] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[m"] = "@function.outer",
-            ["[["] = "@class.outer",
-          },
-          goto_previous_end = {
-            ["[M"] = "@function.outer",
-            ["[]"] = "@class.outer",
-          },
-        },
-        swap = {
-          enable = true,
-          swap_next = {
-            ["<leader>a"] = "@parameter.inner",
-          },
-          swap_previous = {
-            ["<leader>A"] = "@parameter.inner",
-          },
-        },
+      move = {
+        set_jumps = true,
       },
     })
-    local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-    parser_config.gotmpl = {
-      install_info = {
-        url = "https://github.com/ngalaiko/tree-sitter-go-template",
-        files = { "src/parser.c" },
-      },
-      filetype = "gotmpl",
-      used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
-    }
+
+    local select_textobject = function(query)
+      if is_big_file() then
+        return
+      end
+      require("nvim-treesitter-textobjects.select").select_textobject(query, "textobjects")
+    end
+
+    local move_textobject = function(method, query)
+      if is_big_file() then
+        return
+      end
+      require("nvim-treesitter-textobjects.move")[method](query, "textobjects")
+    end
+
+    local swap_textobject = function(method, query)
+      if is_big_file() then
+        return
+      end
+      require("nvim-treesitter-textobjects.swap")[method](query)
+    end
+
+    for _, mode in ipairs({ "x", "o" }) do
+      vim.keymap.set(mode, "aa", function()
+        select_textobject("@parameter.outer")
+      end)
+      vim.keymap.set(mode, "ia", function()
+        select_textobject("@parameter.inner")
+      end)
+      vim.keymap.set(mode, "af", function()
+        select_textobject("@function.outer")
+      end)
+      vim.keymap.set(mode, "if", function()
+        select_textobject("@function.inner")
+      end)
+      vim.keymap.set(mode, "ac", function()
+        select_textobject("@class.outer")
+      end)
+      vim.keymap.set(mode, "ic", function()
+        select_textobject("@class.inner")
+      end)
+    end
+
+    for _, mode in ipairs({ "n", "x", "o" }) do
+      vim.keymap.set(mode, "]m", function()
+        move_textobject("goto_next_start", "@function.outer")
+      end)
+      vim.keymap.set(mode, "]]", function()
+        move_textobject("goto_next_start", "@class.outer")
+      end)
+      vim.keymap.set(mode, "]M", function()
+        move_textobject("goto_next_end", "@function.outer")
+      end)
+      vim.keymap.set(mode, "][", function()
+        move_textobject("goto_next_end", "@class.outer")
+      end)
+      vim.keymap.set(mode, "[m", function()
+        move_textobject("goto_previous_start", "@function.outer")
+      end)
+      vim.keymap.set(mode, "[[", function()
+        move_textobject("goto_previous_start", "@class.outer")
+      end)
+      vim.keymap.set(mode, "[M", function()
+        move_textobject("goto_previous_end", "@function.outer")
+      end)
+      vim.keymap.set(mode, "[]", function()
+        move_textobject("goto_previous_end", "@class.outer")
+      end)
+    end
+
+    vim.keymap.set("n", "<leader>a", function()
+      swap_textobject("swap_next", "@parameter.inner")
+    end)
+    vim.keymap.set("n", "<leader>A", function()
+      swap_textobject("swap_previous", "@parameter.inner")
+    end)
+
+    vim.keymap.set({ "n", "x" }, "<c-space>", incremental_parent)
+    vim.keymap.set({ "n", "x" }, "<c-s>", incremental_parent)
+    vim.keymap.set({ "n", "x" }, "<c-backspace>", incremental_child)
   end,
 }
