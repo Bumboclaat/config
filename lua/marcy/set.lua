@@ -59,11 +59,11 @@ vim.g.loaded_netrwPlugin = 1
 
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-	group = highlight_group,
-	pattern = "*",
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+    group = highlight_group,
+    pattern = "*",
 })
 
 vim.opt.splitright = true
@@ -77,41 +77,73 @@ vim.cmd([[colorscheme kanagawa]])
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- vim.opt.foldtext = "nvim_treesitter#foldtext()"
 
+-- local json_fold_group = vim.api.nvim_create_augroup("JsonFoldFallback", { clear = true })
+-- local function apply_json_indent_folds()
+-- 	vim.opt_local.foldmethod = "indent"
+-- 	vim.opt_local.foldexpr = ""
+-- 	vim.opt_local.foldtext = "foldtext()"
+-- 	vim.opt_local.foldenable = true
+-- 	vim.opt_local.foldlevel = 1337
+-- end
+--
+-- vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
+-- 	group = json_fold_group,
+-- 	pattern = "*",
+-- 	callback = function(args)
+-- 		local ft = vim.bo[args.buf].filetype
+-- 		if ft == "json" or ft == "jsonc" then
+-- 			apply_json_indent_folds()
+-- 		end
+-- 	end,
+-- })
+
 local function fold_virt_text(result, s, lnum, coloff)
-	if not coloff then
-		coloff = 0
-	end
-	local text = ""
-	local hl
-	for i = 1, #s do
-		local char = s:sub(i, i)
-		local hls = vim.treesitter.get_captures_at_pos(0, lnum, coloff + i - 1)
-		local _hl = hls[#hls]
-		if _hl then
-			local new_hl = "@" .. _hl.capture
-			if new_hl ~= hl then
-				table.insert(result, { text, hl })
-				text = ""
-				hl = nil
-			end
-			text = text .. char
-			hl = new_hl
-		else
-			text = text .. char
-		end
-	end
-	table.insert(result, { text, hl })
+    if not coloff then
+        coloff = 0
+    end
+    local text = ""
+    local hl
+    for i = 1, #s do
+        local char = s:sub(i, i)
+        local hls = vim.treesitter.get_captures_at_pos(0, lnum, coloff + i - 1)
+        local _hl = hls[#hls]
+        if _hl then
+            local new_hl = "@" .. _hl.capture
+            if new_hl ~= hl then
+                table.insert(result, { text, hl })
+                text = ""
+                hl = nil
+            end
+            text = text .. char
+            hl = new_hl
+        else
+            text = text .. char
+        end
+    end
+    table.insert(result, { text, hl })
 end
 
 function _G.custom_foldtext()
-	local start = vim.fn.getline(vim.v.foldstart):gsub("\t", string.rep(" ", vim.o.tabstop))
-	local end_str = vim.fn.getline(vim.v.foldend)
-	local end_ = vim.trim(end_str)
-	local result = {}
-	fold_virt_text(result, start, vim.v.foldstart - 1)
-	table.insert(result, { " ... ", "Delimiter" })
-	fold_virt_text(result, end_, vim.v.foldend - 1, #(end_str:match("^(%s+)") or ""))
-	return result
+    local start = vim.fn.getline(vim.v.foldstart):gsub("\t", string.rep(" ", vim.o.tabstop))
+    local end_str = vim.fn.getline(vim.v.foldend)
+    local end_ = vim.trim(end_str)
+    local result = {}
+    fold_virt_text(result, start, vim.v.foldstart - 1)
+    table.insert(result, { " ... ", "Delimiter" })
+    fold_virt_text(result, end_, vim.v.foldend - 1, #(end_str:match("^(%s+)") or ""))
+    return result
 end
 
 vim.opt.foldtext = "v:lua.custom_foldtext()"
+
+-- enable spaces being replaced by '·' and line breaks by '↵'
+-- local space = '·'
+vim.opt.list = false
+-- vim.opt.listchars:append {
+--     multispace = space,
+--     lead = space,
+--     trail = space,
+--     nbsp = space,
+--     space = space,
+--     eol = '↵'
+-- }

@@ -110,7 +110,7 @@ return {
     'rebelot/kanagawa.nvim',
     config = function()
         require('kanagawa').setup({
-            -- theme="dragon",
+            theme="wave",
             overrides = function(colors) -- add/modify highlights
                 local theme = colors.theme
                 return {

@@ -66,7 +66,6 @@ return {
       "html",
       "jdtls",
       "lua_ls",
-      "pyright",
       "rust_analyzer",
       "ruff",
       "svelte",
@@ -333,17 +332,13 @@ return {
       },
     })
 
+    vim.lsp.enable("ty")
+
     vim.lsp.config("pywright", {
       settings = {
         pyright = {
           -- Using Ruff's import organizer
           disableOrganizeImports = true,
-        },
-        python = {
-          analysis = {
-            -- Ignore all files for analysis to exclusively use Ruff for linting
-            ignore = { '*' },
-          },
         },
       },
     })

@@ -80,12 +80,31 @@ return {
                 notification = {
                     wo = { wrap = true }, -- Wrap notifications
                 },
+                zen = {
+                    enter = true,
+                    fixbuf = false,
+                    minimal = false,
+                    width = 240,
+                    height = 0,
+                    backdrop = { transparent = true, blend = 40 },
+                    keys = { q = false },
+                    zindex = 40,
+                    wo = {
+                        winhighlight = "NormalFloat:Normal",
+                    },
+                    w = {
+                        snacks_main = true,
+                    },
+                }
             },
             input = {
                 enabled = false,
                 -- your input configuration comes here
                 -- or leave it empty to use the default settings
                 -- refer to the configuration section below
+            },
+            zen = {
+                enabled = true,
             },
         },
         keys = {
