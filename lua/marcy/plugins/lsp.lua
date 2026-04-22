@@ -66,6 +66,7 @@ return {
       "html",
       "jdtls",
       "lua_ls",
+      "oxlint",
       "rust_analyzer",
       "ruff",
       "svelte",
@@ -287,7 +288,7 @@ return {
       end
     })
 
-    vim.lsp.config("dartls", {})
+    -- vim.lsp.config("dartls", {})
 
     -- setup terraform lsp
     vim.lsp.config("terraformls", {})
@@ -332,9 +333,11 @@ return {
       },
     })
 
+    vim.lsp.enable("oxlint")
+
     vim.lsp.enable("ty")
 
-    vim.lsp.config("pywright", {
+    vim.lsp.config("pyright", {
       settings = {
         pyright = {
           -- Using Ruff's import organizer

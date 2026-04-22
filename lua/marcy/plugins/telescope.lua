@@ -14,16 +14,19 @@ return {
     },
   },
 
-  config = function() -- load refactoring Telescope extension
-    require("telescope").load_extension("refactoring")
+  config = function()
+    -- TODO if refactoring works again comment in
+    -- load refactoring Telescope extension
+    -- require("telescope").load_extension("refactoring")
 
     -- remap to open the Telescope refactoring menu in visual mode
-    vim.api.nvim_set_keymap(
-      "v",
-      "<leader>rr",
-      "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-      { noremap = true }
-    )
+    -- vim.api.nvim_set_keymap(
+    --   "v",
+    --   "<leader>rr",
+    --   "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+    --   { noremap = true }
+    -- )
+
     local lga_actions = require('telescope-live-grep-args.actions')
     local make_entry = require('telescope.make_entry')
 
