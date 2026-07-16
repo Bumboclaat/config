@@ -87,6 +87,8 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
+    local go_build_tags = "unit,test,db,integration"
+
     for _, server in ipairs(servers) do
       if server == "ts_ls" then
         goto continue
@@ -153,7 +155,7 @@ return {
       elseif server == "gopls" then
         server_config.settings = {
           gopls = {
-            buildFlags = { "-tags=unit,test,db" },
+            buildFlags = { "-tags=" .. go_build_tags },
             gofumpt = true,
             ["local"] = "wildfireservice",
             -- Disable gopls staticcheck to avoid conflicts with golangci-lint
@@ -192,7 +194,13 @@ return {
           ".git"
         )
         server_config.init_options = {
-          command = { "golangci-lint", "run", "--output.json.path=stdout", "--show-stats=false" }
+          command = {
+            "golangci-lint",
+            "run",
+            "--build-tags=" .. go_build_tags,
+            "--output.json.path=stdout",
+            "--show-stats=false",
+          }
         }
       elseif server == "pyright" then
         server_config.init_options = {
