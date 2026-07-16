@@ -8,7 +8,7 @@ function LineNumberColors()
     -- vim.api.nvim_set_hl(0, 'Visual', { bg = '#627d9a', bold = true })
     vim.api.nvim_set_hl(0, 'Visual', { bg = '#304B30', bold = true })
     -- vim.api.nvim_set_hl(0, 'Todo', { fg = '#000000' ,bg = '#edde32', bold = true })
-    vim.api.nvim_set_hl(0, 'Todo', { fg = '#000000' ,bg = '#E6C384', bold = true })
+    vim.api.nvim_set_hl(0, 'Todo', { fg = '#000000', bg = '#E6C384', bold = true })
     vim.api.nvim_set_hl(0, 'TelescopeSelection', { bg = '#304B30', bold = true })
     -- vim.api.nvim_set_hl(0, 'TelescopeSelection', { bg = '#627d9a', bold = true })
 
@@ -71,7 +71,7 @@ function MarkdownColors()
 
     -- TreeSitter markdown headings
     vim.api.nvim_set_hl(0, '@markup.heading.1.markdown', { fg = '#E46876', bold = true }) -- waveRed
-    vim.api.nvim_set_hl(0, '@markup.heading.2.markdown', { fg = '#957FB8', bold = true }) -- oniViolet
+    vim.api.nvim_set_hl(0, '@markup.heading.2.markdown', { fg = '#957FB8', bold = true }) -- oniVioletkanakana
     vim.api.nvim_set_hl(0, '@markup.heading.3.markdown', { fg = '#DCA561', bold = true }) -- autumnYellow
     vim.api.nvim_set_hl(0, '@markup.heading.4.markdown', { fg = '#7E9CD8', bold = true }) -- crystalBlue
     vim.api.nvim_set_hl(0, '@markup.heading.5.markdown', { fg = '#957FB8', bold = true }) -- oniViolet
@@ -108,45 +108,77 @@ function MarkdownColors()
     vim.api.nvim_set_hl(0, 'markdownRule', { fg = '#54546D', bold = true }) -- sumiInk4
 end
 
+local transparency_enabled = false
+
+local function setup_kanagawa()
+    require('kanagawa').setup({
+        theme = "wave",
+        transparent = transparency_enabled,
+        overrides = function(colors) -- add/modify highlights
+            local theme = colors.theme
+            return {
+                NormalFloat = { bg = transparency_enabled and "none" or theme.ui.float.bg },
+                FloatBorder = { bg = transparency_enabled and "none" or theme.ui.float.bg_border },
+                FloatTitle = { bg = transparency_enabled and "none" or theme.ui.float.bg_border },
+
+                -- Save an hlgroup with dark background and dimmed foreground
+                -- so that you can use it where your still want darker windows.
+                -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+                NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+
+                LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+                MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+
+                --popup menu
+                Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 }, -- add `blend = vim.o.pumblend` to enable transparency
+                PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+                PmenuSbar = { bg = theme.ui.bg_m1 },
+                PmenuThumb = { bg = theme.ui.bg_p2 },
+
+                -- Telescope
+                -- TelescopeTitle = { fg = theme.ui.special, bold = true },
+                -- TelescopePromptNormal = { bg = theme.ui.bg_p1 },
+                -- TelescopePromptBorder = { fg = theme.ui.bg_p1, bg = theme.ui.bg_p1 },
+                -- TelescopeResultsNormal = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m1 },
+                -- TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = theme.ui.bg_m1 },
+                -- TelescopePreviewNormal = { bg = theme.ui.bg_dim },
+                -- TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
+            }
+        end,
+    })
+end
+
+local function set_transparency(enabled)
+    transparency_enabled = enabled
+    setup_kanagawa()
+    vim.cmd.colorscheme('kanagawa')
+end
+
 return {
     'rebelot/kanagawa.nvim',
     config = function()
-        require('kanagawa').setup({
-            theme="wave",
-            overrides = function(colors) -- add/modify highlights
-                local theme = colors.theme
-                return {
-                    NormalFloat = { bg = "none" },
-                    FloatBorder = { bg = "none" },
-                    FloatTitle = { bg = "none" },
-
-                    -- Save an hlgroup with dark background and dimmed foreground
-                    -- so that you can use it where your still want darker windows.
-                    -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
-                    NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-
-                    LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-                    MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-
-                    --popup menu
-                    Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 }, -- add `blend = vim.o.pumblend` to enable transparency
-                    PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-                    PmenuSbar = { bg = theme.ui.bg_m1 },
-                    PmenuThumb = { bg = theme.ui.bg_p2 },
-
-                    -- Telescope
-                    -- TelescopeTitle = { fg = theme.ui.special, bold = true },
-                    -- TelescopePromptNormal = { bg = theme.ui.bg_p1 },
-                    -- TelescopePromptBorder = { fg = theme.ui.bg_p1, bg = theme.ui.bg_p1 },
-                    -- TelescopeResultsNormal = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m1 },
-                    -- TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = theme.ui.bg_m1 },
-                    -- TelescopePreviewNormal = { bg = theme.ui.bg_dim },
-                    -- TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
-                }
+        local custom_colors = vim.api.nvim_create_augroup('KanagawaCustomColors', { clear = true })
+        vim.api.nvim_create_autocmd('ColorScheme', {
+            group = custom_colors,
+            pattern = 'kanagawa*',
+            callback = function()
+                LineNumberColors()
+                MarkdownColors()
             end,
         })
-    end,
 
-    LineNumberColors(),
-    MarkdownColors()
+        setup_kanagawa()
+
+        vim.api.nvim_create_user_command('TransparencyEnable', function()
+            set_transparency(true)
+        end, { desc = 'Enable background transparency' })
+
+        vim.api.nvim_create_user_command('TransparencyDisable', function()
+            set_transparency(false)
+        end, { desc = 'Disable background transparency' })
+
+        vim.api.nvim_create_user_command('TransparencyToggle', function()
+            set_transparency(not transparency_enabled)
+        end, { desc = 'Toggle background transparency' })
+    end,
 }
