@@ -41,7 +41,7 @@ return {
                     stdin = false,
                 },
                 golines = {
-                    args = { "--max-len=160", "--base-formatter=gofumpt" },
+                    args = { "--max-len=160", "--base-formatter=gofumpt", "--no-reformat-tags" },
                 },
                 pg_format = {
                     args = {
