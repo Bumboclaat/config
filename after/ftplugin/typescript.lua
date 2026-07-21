@@ -1,4 +1,4 @@
-vim.opt.colorcolumn = "140"
+vim.opt.colorcolumn = "160"
 
 local space = "·"
 
