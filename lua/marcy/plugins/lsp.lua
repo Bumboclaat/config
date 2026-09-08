@@ -90,7 +90,7 @@ return {
     local go_build_tags = "unit,test,db,integration"
 
     for _, server in ipairs(servers) do
-      if server == "ts_ls" then
+      if server == "ts_ls" or server == "oxlint" then
         goto continue
       end
 
